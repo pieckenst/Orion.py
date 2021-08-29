@@ -751,6 +751,34 @@ class Guild(Hashable):
         """
         return self._members.get(user_id)
 
+    async def find_member(self, member_id: int, /) -> Optional[Member]:
+        """|coro|
+
+        Finds a :class:`Member` from a guild, using a member ID.
+        This first tries to get from cache, and if that fails it falls back to an api call.
+
+        Parameters
+        -----------
+        member_id: :class:`int`
+            The member's ID to find.
+
+        Raises
+        -------
+        Forbidden
+            You do not have access to the guild.
+        HTTPException
+            Fetching the member failed.
+
+        Returns
+        --------
+        :class:`Member`
+            The member found from the member ID.
+        """
+        member = self.get_member(member_id)
+        if member is None:
+            member = await self.fetch_member(member_id)
+        return member
+
     @property
     def premium_subscribers(self) -> List[Member]:
         """List[:class:`Member`]: A list of members who have "boosted" this guild."""
