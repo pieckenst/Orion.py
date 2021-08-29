@@ -762,13 +762,6 @@ class Guild(Hashable):
         member_id: :class:`int`
             The member's ID to find.
 
-        Raises
-        -------
-        Forbidden
-            You do not have access to the guild.
-        HTTPException
-            Fetching the member failed.
-
         Returns
         --------
         Optional[:class:`Member`]
