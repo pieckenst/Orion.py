@@ -54,17 +54,17 @@ packages = [
     'discord.ext.tasks',
 ]
 
-setup(name='discord.py',
-      author='Rapptz',
-      url='https://github.com/Rapptz/discord.py',
+setup(name='discord.py-revived',
+      author='Benitz Original',
+      url='https://github.com/Discord-py-revived/discord.py',
       project_urls={
         "Documentation": "https://discordpy.readthedocs.io/en/latest/",
-        "Issue tracker": "https://github.com/Rapptz/discord.py/issues",
+        "Issue tracker": "https://github.com/Discord-py-revived/discord.py/issues",
       },
       version=version,
       packages=packages,
       license='MIT',
-      description='A Python wrapper for the Discord API',
+      description='A improved and revived version of the original discord.py',
       long_description=readme,
       long_description_content_type="text/x-rst",
       include_package_data=True,
