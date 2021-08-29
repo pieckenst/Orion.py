@@ -49,7 +49,7 @@ from .emoji import Emoji
 from .errors import InvalidData
 from .permissions import PermissionOverwrite
 from .colour import Colour
-from .errors import InvalidArgument, ClientException
+from .errors import InvalidArgument, ClientException, Forbidden, HTTPException
 from .channel import *
 from .channel import _guild_channel_factory
 from .channel import _threaded_guild_channel_factory
@@ -771,12 +771,15 @@ class Guild(Hashable):
 
         Returns
         --------
-        :class:`Member`
-            The member found from the member ID.
+        Optional[:class:`Member`]
+            The member found from the member ID. Can be ``None`` if the member is not found.
         """
         member = self.get_member(member_id)
         if member is None:
-            member = await self.fetch_member(member_id)
+            try:
+                member = await self.fetch_member(member_id)
+            except (Forbidden, HTTPException):
+                member = None
         return member
 
     @property
