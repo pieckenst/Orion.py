@@ -62,6 +62,10 @@ class Colour:
 
              Return the colour's hash.
 
+        .. describe:: hex(x)
+
+             Return the colour's hex value.
+
         .. describe:: str(x)
 
              Returns the hex format for the colour.
@@ -104,6 +108,9 @@ class Colour:
 
     def __hash__(self) -> int:
         return hash(self.value)
+
+    def __hex__(self) -> str:
+        return hex(self.value)
 
     @property
     def r(self) -> int:
