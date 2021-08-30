@@ -16,7 +16,7 @@ A modern, easy to use, feature-rich, and async ready API wrapper improved and re
 Key Features
 -------------
 
-- Modern Pythonic API using ``async`` and ``await``.
+- Modern Python API async wrapper.
 - Proper rate limit handling.
 - Optimised in both speed and memory.
 - Implements new discord features into Bots.
