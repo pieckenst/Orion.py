@@ -1,4 +1,4 @@
-discord.py-revived
+orion.py
 ==========
 
 .. image:: https://discord.com/api/guilds/336642139381301249/embed.png
@@ -19,6 +19,7 @@ Key Features
 - Modern Pythonic API using ``async`` and ``await``.
 - Proper rate limit handling.
 - Optimised in both speed and memory.
+- Implements new discord features into Bots.
 
 Installing
 ----------
@@ -30,20 +31,20 @@ To install the library without full voice support, you can just run the followin
 .. code:: sh
 
     # Linux/macOS
-    python3 -m pip install -U discord.py-revived
+    python3 -m pip install -U orion.py
 
     # Windows
-    py -3 -m pip install -U discord.py-revived
+    py -3 -m pip install -U orion.py
 
 Otherwise to get voice support you should run the following command:
 
 .. code:: sh
 
     # Linux/macOS
-    python3 -m pip install -U "discord.py-revived[voice]"
+    python3 -m pip install -U "orion.py[voice]"
 
     # Windows
-    py -3 -m pip install -U discord.py-revived[voice]
+    py -3 -m pip install -U orion.py[voice]
 
 
 To install the development version, do the following:
@@ -51,7 +52,7 @@ To install the development version, do the following:
 .. code:: sh
 
     $ git clone https://github.com/Discord-py-Revived/discord.py
-    $ cd discord.py-revived
+    $ cd orion.py
     $ python3 -m pip install -U .[voice]
 
 
