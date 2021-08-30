@@ -45,7 +45,7 @@ import datetime
 
 import discord.abc
 from .permissions import PermissionOverwrite, Permissions
-from .enums import ChannelType, StagePrivacyLevel, try_enum, VoiceRegion, VideoQualityMode
+from .enums import ChannelType, PartyType, StagePrivacyLevel, try_enum, VoiceRegion, VideoQualityMode
 from .mixins import Hashable
 from .object import Object
 from . import utils
@@ -65,6 +65,7 @@ __all__ = (
     'StoreChannel',
     'GroupChannel',
     'PartialMessageable',
+    'Party',
 )
 
 if TYPE_CHECKING:
@@ -876,6 +877,7 @@ class VocalGuildChannel(discord.abc.Connectable, discord.abc.GuildChannel, Hasha
         return base
 
 
+
 class VoiceChannel(VocalGuildChannel):
     """Represents a Discord guild voice channel.
 
@@ -1036,6 +1038,27 @@ class VoiceChannel(VocalGuildChannel):
         if payload is not None:
             # the payload will always be the proper channel payload
             return self.__class__(state=self._state, guild=self.guild, data=payload)  # type: ignore
+
+    async def create_party(self, application_id: PartyType, max_age: int = 86400 , max_uses: int = 0) -> Party:
+        """|coro|
+
+        Creates a party in this voice channel.
+
+        .. versionadded:: 2.0
+
+        Raises
+        -------
+        Forbidden
+            You do not have permissions to create a party.
+        HTTPException
+            Party creation failed.
+
+        Returns
+        --------
+        :class:`Party`
+            The created party.
+        """
+        return Party(await self._state.http.create_party(self.id, application_id.value, max_age=max_age, max_uses=max_uses))
 
 
 class StageChannel(VocalGuildChannel):
@@ -2037,6 +2060,22 @@ class PartialMessageable(discord.abc.Messageable, Hashable):
         from .message import PartialMessage
 
         return PartialMessage(channel=self, id=message_id)
+
+class Party:
+    """Represents a party in a voice channel."""
+    def __init__(self, data):
+        self.code = data['code']
+        # TODO: add more fields here: https://discord.com/channels/881095332434440224/881099794804797490/881549687331643443
+
+    def __repr__(self):
+        return f'<Party code={self.code}>'
+
+    def __str__(self):
+        return f'https://discord.gg/{self.code}'
+
+    def __eq__(self, other):
+        return isinstance(other, Party) and self.code == other.code
+
 
 
 def _guild_channel_factory(channel_type: int):

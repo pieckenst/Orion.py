@@ -49,7 +49,7 @@ from .emoji import Emoji
 from .errors import InvalidData
 from .permissions import PermissionOverwrite
 from .colour import Colour
-from .errors import InvalidArgument, ClientException
+from .errors import InvalidArgument, ClientException, Forbidden, HTTPException
 from .channel import *
 from .channel import _guild_channel_factory
 from .channel import _threaded_guild_channel_factory
@@ -750,6 +750,30 @@ class Guild(Hashable):
             The member or ``None`` if not found.
         """
         return self._members.get(user_id)
+
+    async def find_member(self, member_id: int, /) -> Optional[Member]:
+        """|coro|
+
+        Finds a :class:`Member` from a guild, using a member ID.
+        This first tries to get from cache, and if that fails it falls back to an api call.
+
+        Parameters
+        -----------
+        member_id: :class:`int`
+            The member's ID to find.
+
+        Returns
+        --------
+        Optional[:class:`Member`]
+            The member found from the member ID. Can be ``None`` if the member is not found.
+        """
+        member = self.get_member(member_id)
+        if member is None:
+            try:
+                member = await self.fetch_member(member_id)
+            except (Forbidden, HTTPException):
+                member = None
+        return member
 
     @property
     def premium_subscribers(self) -> List[Member]:
@@ -2490,7 +2514,8 @@ class Guild(Hashable):
         data = await self._state.http.create_role(self.id, reason=reason, **fields)
         role = Role(guild=self, data=data, state=self._state)
 
-        # TODO: add to cache
+        # temporarily add to the cache
+        self._roles[role.id] = role
         return role
 
     async def edit_role_positions(self, positions: Dict[Snowflake, int], *, reason: Optional[str] = None) -> List[Role]:

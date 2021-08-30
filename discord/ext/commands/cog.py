@@ -244,6 +244,7 @@ class Cog(metaclass=CogMeta):
 
     @description.setter
     def description(self, description: str) -> None:
+        """A Description of a Cog."""
         self.__cog_description__ = description
 
     def walk_commands(self) -> Generator[Command, None, None]:
