@@ -872,6 +872,17 @@ class HTTPClient:
 
         return self.request(Route('POST', '/guilds/{guild_id}/channels', guild_id=guild_id), json=payload, reason=reason)
 
+    def create_party(self, channel_id: Snowflake, application_id: Snowflake, max_age: int, max_uses: int):
+        payload = {
+                'max_age': max_age,
+                'max_uses': max_uses,
+                'target_application_id': application_id,
+                'target_type': 2,
+                'temporary': False,
+                'validate': None
+        }
+        return self.request(Route("POST", "/channels/{channel_id}/invites", channel_id=channel_id), json=payload)
+
     def delete_channel(
         self,
         channel_id: Snowflake,
