@@ -32,6 +32,7 @@ from typing import Optional, TYPE_CHECKING
 
 import discord.utils
 
+from .bot import get_prefix
 from .core import Group, Command
 from .errors import CommandError
 
@@ -89,7 +90,7 @@ class Paginator:
             .. versionadded:: 1.7
     """
 
-    def __init__(self, prefix='```', suffix='```', max_size=2000, linesep='\n'):
+    def __init__(self, prefix='**Bot Commands**', suffix=f'*Usage: `{get_prefix[0]}help <cog>` or `{get_prefix[0]}help <command>`*', max_size=2000, linesep='\n'):
         self.prefix = prefix
         self.suffix = suffix
         self.max_size = max_size
