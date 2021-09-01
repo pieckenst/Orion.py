@@ -16,3 +16,4 @@ docs/crowdin.py
 *.flac
 *.mo
 .pypirc
+*.gz
