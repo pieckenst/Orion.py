@@ -22,12 +22,12 @@ extras_require = {
 }
 
 packages = [
-    'discord',
-    'discord.types',
-    'discord.ui',
-    'discord.webhook',
-    'discord.ext.commands',
-    'discord.ext.tasks',
+    'orion',
+    'orion.types',
+    'orion.ui',
+    'orion.webhook',
+    'orion.ext.commands',
+    'orion.ext.tasks',
 ]
 
 setup(name='orion.py',
@@ -37,8 +37,9 @@ setup(name='orion.py',
       project_urls={
         "Documentation": "https://discordpy.readthedocs.io/en/latest/",
         "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
+        "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
       },
-      version="2.0.0",
+      version="2.1.0",
       packages=packages,
       license='MIT',
       description='A improved and revived version of the original discord.py',
