@@ -1,7 +1,7 @@
 orion.py
 ==========
 
-.. image:: https://discord.com/api/guilds/336642139381301249/embed.png
+.. image:: https://discord.com/api/guilds/881095332434440224/embed.png
    :target: https://discord.gg/zzdEGHbkTj
    :alt: Discord server invite
 .. image:: https://img.shields.io/pypi/v/discord.py.svg
@@ -16,7 +16,7 @@ A modern, easy to use, feature-rich, and async ready API wrapper improved and re
 Key Features
 -------------
 
-- Modern Pythonic API using ``async`` and ``await``.
+- Modern Python API async wrapper.
 - Proper rate limit handling.
 - Optimised in both speed and memory.
 - Implements new discord features into Bots.
@@ -51,7 +51,8 @@ To install the development version, do the following:
 
 .. code:: sh
 
-    $ git clone https://github.com/Discord-py-Revived/discord.py
+
+    $ git clone https://github.com/Discord-Orion/orion.py@Development
     $ cd orion.py
     $ python3 -m pip install -U .[voice]
 
@@ -71,7 +72,7 @@ Quick Example
 
 .. code:: py
 
-    import discord
+    import orion
 
     class MyClient(discord.Client):
         async def on_ready(self):
@@ -93,8 +94,8 @@ Bot Example
 
 .. code:: py
 
-    import discord
-    from discord.ext import commands
+    import orion
+    from orion.ext import commands
 
     bot = commands.Bot(command_prefix='>')
 
