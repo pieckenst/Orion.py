@@ -22,12 +22,12 @@ extras_require = {
 }
 
 packages = [
-    'orion',
-    'orion.types',
-    'orion.ui',
-    'orion.webhook',
-    'orion.ext.commands',
-    'orion.ext.tasks',
+    'discord',
+    'discord.types',
+    'discord.ui',
+    'discord.webhook',
+    'discord.ext.commands',
+    'discord.ext.tasks',
 ]
 
 setup(name='orion.py',
