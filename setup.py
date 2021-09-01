@@ -5,30 +5,6 @@ requirements = []
 with open('requirements.txt') as f:
   requirements = f.read().splitlines()
 
-version = ''
-with open('discord/__init__.py') as f:
-    version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
-
-if not version:
-    raise RuntimeError('version is not set')
-
-if version.endswith(('a', 'b', 'rc')):
-    # append version identifier based on commit count
-    try:
-        import subprocess
-        p = subprocess.Popen(['git', 'rev-list', '--count', 'HEAD'],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if out:
-            version += out.decode('utf-8').strip()
-        p = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if out:
-            version += '+g' + out.decode('utf-8').strip()
-    except Exception:
-        pass
-
 readme = ''
 with open('README.rst') as f:
     readme = f.read()
@@ -46,22 +22,24 @@ extras_require = {
 }
 
 packages = [
-    'discord',
-    'discord.types',
-    'discord.ui',
-    'discord.webhook',
-    'discord.ext.commands',
-    'discord.ext.tasks',
+    'orion',
+    'orion.types',
+    'orion.ui',
+    'orion.webhook',
+    'orion.ext.commands',
+    'orion.ext.tasks',
 ]
 
-setup(name='discord.py-revived',
+setup(name='orion.py',
       author='Benitz Original',
-      url='https://github.com/Discord-py-revived/discord.py',
+      author_email="benitz@numix.xyz",
+      url='https://github.com/Discord-Orion/Orion.py',
       project_urls={
         "Documentation": "https://discordpy.readthedocs.io/en/latest/",
-        "Issue tracker": "https://github.com/Discord-py-revived/discord.py/issues",
+        "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
+        "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
       },
-      version=version,
+      version="2.1.0",
       packages=packages,
       license='MIT',
       description='A improved and revived version of the original discord.py',

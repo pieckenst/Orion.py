@@ -15,3 +15,4 @@ docs/crowdin.py
 *.jpg
 *.flac
 *.mo
+.pypirc

@@ -1,4 +1,4 @@
-Orion (discord.py)
+orion.py
 ==========
 
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
@@ -50,6 +50,7 @@ Otherwise to get voice support you should run the following command:
 To install the development version, do the following:
 
 .. code:: sh
+
 
     $ git clone https://github.com/Discord-Orion/orion.py@Development
     $ cd orion.py
