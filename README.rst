@@ -72,9 +72,9 @@ Quick Example
 
 .. code:: py
 
-    import orion
+    import discord
 
-    class MyClient(orion.Client):
+    class MyClient(discord.Client):
         async def on_ready(self):
             print('Logged on as', self.user)
 
@@ -94,8 +94,8 @@ Bot Example
 
 .. code:: py
 
-    import orion
-    from orion.ext import commands
+    import discord
+    from discord.ext import commands
 
     bot = commands.Bot(command_prefix='>')
 
