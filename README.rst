@@ -4,8 +4,8 @@ orion.py
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
    :target: https://discord.gg/zzdEGHbkTj
    :alt: Discord server invite
-.. image:: https://img.shields.io/pypi/v/discord.py.svg
-   :target: https://pypi.python.org/pypi/discord.py
+.. image:: https://img.shields.io/pypi/v/orion.py.svg
+   :target: https://pypi.python.org/pypi/orion.py
    :alt: PyPI version info
 .. image:: https://img.shields.io/pypi/pyversions/discord.py.svg
    :target: https://pypi.python.org/pypi/discord.py
@@ -72,7 +72,7 @@ Quick Example
 
 .. code:: py
 
-    import orion
+    import discord
 
     class MyClient(discord.Client):
         async def on_ready(self):
@@ -94,8 +94,8 @@ Bot Example
 
 .. code:: py
 
-    import orion
-    from orion.ext import commands
+    import discord
+    from discord.ext import commands
 
     bot = commands.Bot(command_prefix='>')
 
