@@ -1,0 +1,1 @@
+BASE_API = "https://discord.com/api/v8"
