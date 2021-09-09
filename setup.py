@@ -1,13 +1,13 @@
 from setuptools import setup
-import re
 
 requirements = []
+README = ''
+
 with open('requirements.txt') as f:
   requirements = f.read().splitlines()
 
-readme = ''
 with open('README.rst') as f:
-    readme = f.read()
+    README = f.read()
 
 extras_require = {
     'voice': ['PyNaCl>=1.3.0,<1.5'],
@@ -43,7 +43,7 @@ setup(name='orion.py',
       packages=packages,
       license='MIT',
       description='A improved and revived version of the original discord.py',
-      long_description=readme,
+      long_description=README,
       long_description_content_type="text/x-rst",
       include_package_data=True,
       install_requires=requirements,
@@ -61,6 +61,6 @@ setup(name='orion.py',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
-        'Typing :: Typed',
+        'Typing :: Typed'
       ]
 )
