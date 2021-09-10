@@ -8,7 +8,7 @@ An extension module to facilitate creation of bot commands.
 :license: MIT, see LICENSE for more details.
 """
 
-from ...client import Interaction
+from ...InteractionClient import Interaction
 from .context import ComponentContext, MenuContext, SlashContext
 from ...interaction_overide import ComponentMessage
 from ...model import ButtonStyle, ComponentType, ContextMenuType, InteractionOptionType

@@ -4,7 +4,7 @@ import uuid
 
 import discord
 
-from ..context import ComponentContext
+from ..ext.commands.context import ComponentContext
 from ..error import IncorrectFormat, IncorrectType
 from ..model import ButtonStyle, ComponentType
 

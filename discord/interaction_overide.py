@@ -1,5 +1,7 @@
 import typing
 
+from . import utils
+
 from .message import Message
 from .mentions import AllowedMentions
 from .file import File

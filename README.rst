@@ -20,6 +20,7 @@ Key Features
 - Proper rate limit handling.
 - Optimised in both speed and memory.
 - Implements new discord features into Bots.
+- Improved methods with more features.
 
 Installing
 ----------

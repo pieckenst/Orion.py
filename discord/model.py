@@ -4,11 +4,11 @@ import typing
 from contextlib import suppress
 from enum import IntEnum
 from inspect import iscoroutinefunction
-
+from .error import Forbidden
 from .ext.commands.cooldowns import BucketType, CooldownMapping
 from .ext.commands.errors import CommandOnCooldown
 
-from . import error, http
+from . import error, http, abc, Fobidden, HTTPException
 from .interaction_overide import ComponentMessage
 
 
@@ -437,11 +437,11 @@ class InteractionOptionType(IntEnum):
             return cls.BOOLEAN
         if issubclass(t, int):
             return cls.INTEGER
-        if issubclass(t, discord.abc.User):
+        if issubclass(t, abc.User):
             return cls.USER
-        if issubclass(t, discord.abc.GuildChannel):
+        if issubclass(t, abc.GuildChannel):
             return cls.CHANNEL
-        if issubclass(t, discord.abc.Role):
+        if issubclass(t, abc.Role):
             return cls.ROLE
         if hasattr(typing, "_GenericAlias"):
             if hasattr(t, "__origin__"):
@@ -549,19 +549,19 @@ class InteractionMessage(ComponentMessage):
         else:
             try:
                 await super().edit(**fields)
-            except discord.Forbidden:
+            except Forbidden:
                 await self._interaction_edit(**fields)
 
     async def delete(self, *, delay=None):
         """Refer :meth:`discord.Message.delete`."""
         try:
             await super().delete(delay=delay)
-        except discord.Forbidden:
+        except Forbidden:
             if not delay:
                 return await self._http.delete(self.__interaction_token, self.id)
 
             async def wrap():
-                with suppress(discord.HTTPException):
+                with suppress(HTTPException):
                     await asyncio.sleep(delay)
                     await self._http.delete(self.__interaction_token, self.id)
 
@@ -629,9 +629,9 @@ class InteractionPermissionType(IntEnum):
 
     @classmethod
     def from_type(cls, t: type):
-        if issubclass(t, discord.abc.Role):
+        if issubclass(t, abc.Role):
             return cls.ROLE
-        if issubclass(t, discord.abc.User):
+        if issubclass(t, abc.User):
             return cls.USER
 
 
