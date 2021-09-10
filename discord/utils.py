@@ -1040,7 +1040,7 @@ def quick_snowflake() -> int:
     Returns
     --------
     :class:`int`
-        The snowflake representing a snowflake generate there(created by 
+        The snowflake representing a snowflake generated on the spot.
     """
 
     return int(utcnow().timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
