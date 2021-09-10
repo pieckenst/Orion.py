@@ -1017,3 +1017,31 @@ def format_dt(dt: datetime.datetime, /, style: Optional[TimestampStyle] = None) 
     if style is None:
         return f'<t:{int(dt.timestamp())}>'
     return f'<t:{int(dt.timestamp())}:{style}>'
+    
+
+def generate_snowflake(dt: datetime.datetime) -> int:
+    """Returns a numeric snowflake pretending to be created at the given date.
+    -----------
+    dt: :class:`datetime.datetime`
+        A datetime object to convert to a snowflake.
+        If naive, the timezone is assumed to be local time.
+    Returns
+    --------
+    :class:`int`
+        The snowflake representing the time given.
+    """
+
+    return int(dt.timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
+
+
+def quick_snowflake() -> int:
+    """Returns a numeric snowflake pretending to be created at the given date.
+    -----------
+    Returns
+    --------
+    :class:`int`
+        The snowflake representing a snowflake generate there(created by 
+    """
+
+    return int(utcnow().timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
+
