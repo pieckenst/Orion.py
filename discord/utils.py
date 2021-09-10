@@ -84,8 +84,6 @@ __all__ = (
     'escape_mentions',
     'as_chunks',
     'format_dt',
-    'generate_snowflake',
-    'quick_snowflake',
 )
 
 DISCORD_EPOCH = 1420070400000
