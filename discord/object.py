@@ -99,11 +99,11 @@ class Object(Hashable):
     @property
     def process_id(self) -> int:
         """returns the process id that made the user id when the user id was generate as :class:`int`: """
-        return (snowflake.id & 0x1F000) >> 12
+        return (self.id & 0x1F000) >> 12
     
     @property
-    def process_id(self) -> int:
+    def increment(self) -> int:
         """returns the process id that made the user id when the user id was generate as :class:`int`: """
-        return (self.id 
+        return (self.id & 0xFFF)
 
 
