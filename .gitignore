@@ -17,4 +17,4 @@ docs/crowdin.py
 *.mo
 .pypirc
 *.gz
-**/__pycache__ 
+**/__pycache__

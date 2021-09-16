@@ -35,9 +35,9 @@ setup(name='orion.py',
       author_email="benitz@numix.xyz",
       url='https://github.com/Discord-Orion/Orion.py',
       project_urls={
-          "Documentation": "https://discordpy.readthedocs.io/en/latest/",
-          "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
-          "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
+        "Documentation": "https://discordpy.readthedocs.io/en/latest/",
+        "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
+        "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
       },
       version="2.3.1",
       packages=packages,
@@ -50,17 +50,17 @@ setup(name='orion.py',
       extras_require=extras_require,
       python_requires='>=3.8.0',
       classifiers=[
-          'Development Status :: 5 - Production/Stable',
-          'License :: OSI Approved :: MIT License',
-          'Intended Audience :: Developers',
-          'Natural Language :: English',
-          'Operating System :: OS Independent',
-          'Programming Language :: Python :: 3.8',
-          'Programming Language :: Python :: 3.9',
-          'Topic :: Internet',
-          'Topic :: Software Development :: Libraries',
-          'Topic :: Software Development :: Libraries :: Python Modules',
-          'Topic :: Utilities',
-          'Typing :: Typed'
+        'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: MIT License',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Topic :: Internet',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Utilities',
+        'Typing :: Typed'
       ]
-      )
+)

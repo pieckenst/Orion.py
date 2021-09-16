@@ -4,7 +4,7 @@ orion.py
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
    :target: https://discord.gg/zzdEGHbkTj
    :alt: Discord server invite
-image:: https://img.shields.io/pypi/v/discord.py.svg
+.. image:: https://img.shields.io/pypi/v/discord.py.svg
    :target: https://pypi.python.org/pypi/discord.py
    :alt: PyPI version info
 .. image:: https://img.shields.io/pypi/pyversions/discord.py.svg
@@ -114,3 +114,4 @@ Links
 - `Documentation <https://discordpy.readthedocs.io/en/latest/index.html>`_
 - `Official Discord Server <https://discord.gg/zzdEGHbkTj>`_
 - `Discord API <https://discord.gg/discord-api>`_
+\

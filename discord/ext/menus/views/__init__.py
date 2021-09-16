@@ -1,13 +1,17 @@
 """MIT License
+
 Copyright (c) 2021 Oliver Ni, Rapptz
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,8 +58,7 @@ class ViewMenu(menus.Menu):
 
         view = discord.ui.View(timeout=self.timeout)
         for i, (emoji, button) in enumerate(self.buttons.items()):
-            item = discord.ui.Button(
-                style=discord.ButtonStyle.secondary, emoji=emoji, row=i // 5)
+            item = discord.ui.Button(style=discord.ButtonStyle.secondary, emoji=emoji, row=i // 5)
             item.callback = make_callback(button)
             view.add_item(item)
 
@@ -150,7 +153,7 @@ class ViewMenu(menus.Menu):
         self.ctx = ctx
         self._author_id = ctx.author.id
         channel = channel or ctx.channel
-        is_guild = hasattr(channel, "guild")
+        is_guild = hasattr(channel, "guild") 
         me = channel.guild.me if is_guild else ctx.bot.user
         permissions = channel.permissions_for(me)
         self._verify_permissions(ctx, channel, permissions)

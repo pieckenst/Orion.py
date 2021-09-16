@@ -111,12 +111,15 @@ class AllowedMentions:
         """
         return cls(everyone=False, users=False, roles=False, replied_user=False)
 
+    
     @classmethod
     def default(cls: Type[A]) -> A:
         """A factory method that returns a :class:`AllowedMentions` with all potential massive ping fields explicitly set to ``False``
+
         .. versionadded:: 2.0
         """
         return cls(everyone=False, users=True, roles=False, replied_user=True)
+    
 
     def to_dict(self) -> AllowedMentionsPayload:
         parse = []

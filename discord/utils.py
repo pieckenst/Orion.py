@@ -1019,7 +1019,7 @@ def format_dt(dt: datetime.datetime, /, style: Optional[TimestampStyle] = None) 
     if style is None:
         return f'<t:{int(dt.timestamp())}>'
     return f'<t:{int(dt.timestamp())}:{style}>'
-
+    
 
 def generate_snowflake(dt: datetime.datetime) -> int:
     """Returns a numeric snowflake pretending to be created at the given date.
@@ -1042,7 +1042,7 @@ def quick_snowflake() -> int:
     Returns
     --------
     :class:`int`
-        The snowflake representing a snowflake generated on the spot. 
+        The snowflake representing a snowflake generated on the spot.
     """
 
     return int(utcnow().timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
