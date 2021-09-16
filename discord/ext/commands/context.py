@@ -37,7 +37,6 @@ import discord.utils
 
 from discord.ext import commands
 from discord.utils import snowflake_time
-from ... import error, http, model
 
 from discord.message import Message
 
