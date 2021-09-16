@@ -39,7 +39,7 @@ setup(name='orion.py',
           "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
           "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
       },
-      version="2.1.1",
+      version="2.3.1",
       packages=packages,
       license='MIT',
       description='A improved and revived version of the original discord.py',
