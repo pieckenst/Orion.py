@@ -34,11 +34,9 @@ import traceback
 
 
 from typing import Any, Callable, Coroutine, Dict, Generator, List, Optional, Sequence, TYPE_CHECKING, Tuple, TypeVar, Union
-from .ext.commands import AutoShardedBot, Bot, Cog
 
 import aiohttp
 
-from . import context, error, http, model, Forbidden, HTTPException, Guild, NotFound
 from .user import User, ClientUser
 from .invite import Invite
 from .template import Template
@@ -67,8 +65,6 @@ from .ui.view import View
 from .stage_instance import StageInstance
 from .threads import Thread
 from .sticker import GuildSticker, StandardSticker, StickerPack, _sticker_factory
-from .InteractionUtils import manage_commands
-from .InteractionUtils.manage_components import get_components_ids, get_messages_ids
 
 if TYPE_CHECKING:
     from .abc import SnowflakeTime, PrivateChannel, GuildChannel, Snowflake

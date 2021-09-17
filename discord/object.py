@@ -103,7 +103,5 @@ class Object(Hashable):
     
     @property
     def increment(self) -> int:
-        """returns the increment that made the user id when the user id was generate as :class:`int`: """
+        """returns the increment id that made the user id when the user id was generate as :class:`int`: """
         return (self.id & 0xFFF)
-
-

@@ -38,7 +38,7 @@ from typing import Any, Callable, Mapping, List, Dict, TYPE_CHECKING, Optional, 
 from .core import GroupMixin
 from .view import StringView
 from .context import Context
-from . import utils, errors, User, Client, ClientException, AutoShardedClient
+from ... import utils, errors, User, Client, ClientException, AutoShardedClient
 from .help import HelpCommand, DefaultHelpCommand
 from .cog import Cog
 

@@ -1046,4 +1046,3 @@ def quick_snowflake() -> int:
     """
 
     return int(utcnow().timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
-
