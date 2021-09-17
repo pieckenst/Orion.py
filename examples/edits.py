@@ -17,4 +17,4 @@ class MyClient(discord.Client):
         await before.channel.send(msg)
 
 client = MyClient()
-client.run('token')
+client.run('your-token-here')

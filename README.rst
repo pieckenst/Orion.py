@@ -1,4 +1,4 @@
-orion.py
+Orion.py
 ==========
 
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
@@ -63,7 +63,7 @@ Optional Packages
 
 * `PyNaCl <https://pypi.org/project/PyNaCl/>`__ (for voice support)
 
-Please note that on Linux installing voice you must install the following packages via your favourite package manager (e.g. ``apt``, ``dnf``, etc) before running the above commands:
+Please note that on Linux installing voice you must install the following packages VIA your favourite package manager (e.g. ``apt``, ``dnf``, etc) before running the above commands:
 
 * libffi-dev (or ``libffi-devel`` on some systems)
 * python-dev (e.g. ``python3.6-dev`` for Python 3.6)
@@ -88,7 +88,7 @@ Quick Example
                 await message.channel.send('pong')
 
     client = MyClient()
-    client.run('token')
+    client.run('your-token-here')
 
 Bot Example
 ~~~~~~~~~~~~~
@@ -104,7 +104,7 @@ Bot Example
     async def ping(ctx):
         await ctx.send('pong')
 
-    bot.run('token')
+    bot.run('your-token-here')
 
 You can find more examples in the examples directory.
 

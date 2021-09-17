@@ -82,4 +82,4 @@ intents = discord.Intents.default()
 intents.members = True
 
 client = MyClient(intents=intents)
-client.run('token')
+client.run('your-token-here')
