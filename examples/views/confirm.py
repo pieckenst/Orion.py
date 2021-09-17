@@ -54,4 +54,4 @@ async def ask(ctx: commands.Context):
         print('Cancelled...')
 
 
-bot.run('token')
+bot.run('your-token-here')

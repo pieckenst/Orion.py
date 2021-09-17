@@ -60,4 +60,4 @@ async def prepare(ctx: commands.Context):
     await ctx.send("What's your favourite colour?", view=PersistentView())
 
 
-bot.run('token')
+bot.run('your-token-here')

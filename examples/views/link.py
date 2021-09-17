@@ -36,4 +36,4 @@ async def google(ctx: commands.Context, *, query: str):
     await ctx.send(f'Google Result for: `{query}`', view=Google(query))
 
 
-bot.run('token')
+bot.run('your-token-here')

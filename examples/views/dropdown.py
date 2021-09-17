@@ -60,4 +60,4 @@ async def colour(ctx):
     await ctx.send('Pick your favourite colour:', view=view)
 
 
-bot.run('token')
+bot.run('your-token-here')
