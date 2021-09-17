@@ -12,16 +12,16 @@ Orion.py
    :alt: PyPI supported Python versions
 .. image:: https://img.shields.io/tokei/lines/github/Senarc-Studios/Orion.py?style=plastic
     :alt: Lines of code
-.. image:: https://img.shields.io/github/issues/Senarc-Studios/Orion.py   
+.. image:: https://img.shields.io/github/issues/Senarc-Studios/Orion.py?style=plastic
     :alt: GitHub issues   
     :target: https://github.com/Senarc-Studios/Orion.py/issues
-.. image:: https://img.shields.io/github/forks/Senarc-Studios/Orion.py   
+.. image:: https://img.shields.io/github/forks/Senarc-Studios/Orion.py?style=plastic
     :alt: GitHub forks   
     :target: https://github.com/Senarc-Studios/Orion.py/network
-.. image:: https://img.shields.io/github/stars/Senarc-Studios/Orion.py   
+.. image:: https://img.shields.io/github/stars/Senarc-Studios/Orion.py?style=plastic
     :alt: GitHub stars   
     :target: https://github.com/Senarc-Studios/Orion.py/stargazers
-.. image:: https://img.shields.io/github/license/Senarc-Studios/Orion.py   
+.. image:: https://img.shields.io/github/license/Senarc-Studios/Orion.py?style=plastic
     :alt: GitHub license   
     :target: https://github.com/Senarc-Studios/Orion.py/blob/master/LICENSE
 
