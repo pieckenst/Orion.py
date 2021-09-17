@@ -114,4 +114,3 @@ Links
 - `Documentation <https://discordpy.readthedocs.io/en/latest/index.html>`_
 - `Official Discord Server <https://discord.gg/zzdEGHbkTj>`_
 - `Discord API <https://discord.gg/discord-api>`_
-\
