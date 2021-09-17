@@ -24,75 +24,39 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-import typing
-
-import discord
 import asyncio
 import json
 import logging
 import sys
-from typing import (
-    Any,
-    ClassVar,
-    Coroutine,
-    Dict,
-    Iterable,
-    List,
-    Optional,
-    Sequence,
-    TYPE_CHECKING,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
-from urllib.parse import quote as _uriquote
+import typing
 import weakref
+from typing import (TYPE_CHECKING, Any, ClassVar, Coroutine, Dict, Iterable,
+                    List, Optional, Sequence, Tuple, Type, TypeVar, Union)
+from urllib.parse import quote as _uriquote
 
 import aiohttp
 
-from . import error
-from .errors import HTTPException, Forbidden, NotFound, LoginFailure, DiscordServerError, GatewayNotFound, InvalidArgument
-from .gateway import DiscordClientWebSocketResponse
-from . import __version__, utils
-from .utils import MISSING
+import discord
+
+from . import __version__, error, utils
 from .const import BASE_API
+from .errors import (DiscordServerError, Forbidden, GatewayNotFound,
+                     HTTPException, InvalidArgument, LoginFailure, NotFound)
+from .gateway import DiscordClientWebSocketResponse
+from .utils import MISSING
 
 _log = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
-    from .file import File
-    from .enums import (
-        AuditLogAction,
-        InteractionResponseType,
-    )
-
-    from .types import (
-        appinfo,
-        audit_log,
-        channel,
-        components,
-        emoji,
-        embed,
-        guild,
-        integration,
-        interactions,
-        invite,
-        member,
-        message,
-        template,
-        role,
-        user,
-        webhook,
-        channel,
-        widget,
-        threads,
-        voice,
-        sticker,
-    )
-    from .types.snowflake import Snowflake, SnowflakeList
-
     from types import TracebackType
+
+    from .enums import AuditLogAction, InteractionResponseType
+    from .file import File
+    from .types import (appinfo, audit_log, channel, components, embed, emoji,
+                        guild, integration, interactions, invite, member,
+                        message, role, sticker, template, threads, user, voice,
+                        webhook, widget)
+    from .types.snowflake import Snowflake, SnowflakeList
 
     T = TypeVar('T')
     BE = TypeVar('BE', bound=BaseException)

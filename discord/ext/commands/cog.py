@@ -24,15 +24,14 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import inspect
-import discord.utils
-
 import typing
-from typing import Any, Callable, ClassVar, Dict, Generator, List, Optional, TYPE_CHECKING, Tuple, TypeVar, Type
+from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Dict, Generator,
+                    List, Optional, Tuple, Type, TypeVar)
 
 import discord
+import discord.utils
 
 from ...error import IncorrectFormat, IncorrectGuildIDType
-
 from ._types import _BaseCommand
 
 if TYPE_CHECKING:

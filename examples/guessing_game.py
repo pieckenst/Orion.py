@@ -1,6 +1,8 @@
-import discord
-import random
 import asyncio
+import random
+
+import discord
+
 
 class MyClient(discord.Client):
     async def on_ready(self):

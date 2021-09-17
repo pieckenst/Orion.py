@@ -1,6 +1,6 @@
+import discord
 from discord.ext import commands
 
-import discord
 
 class EphemeralCounterBot(commands.Bot):
     def __init__(self):

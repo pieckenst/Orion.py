@@ -24,31 +24,20 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-import re
 import inspect
-from typing import (
-    Any,
-    Dict,
-    Generic,
-    Iterable,
-    Literal,
-    Optional,
-    TYPE_CHECKING,
-    List,
-    Protocol,
-    Type,
-    TypeVar,
-    Tuple,
-    Union,
-    runtime_checkable,
-)
+import re
+from typing import (TYPE_CHECKING, Any, Dict, Generic, Iterable, List, Literal,
+                    Optional, Protocol, Tuple, Type, TypeVar, Union,
+                    runtime_checkable)
 
 import discord
+
 from .errors import *
 
 if TYPE_CHECKING:
-    from .context import Context
     from discord.message import PartialMessageableChannel
+
+    from .context import Context
 
 
 __all__ = (

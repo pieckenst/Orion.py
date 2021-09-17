@@ -23,36 +23,31 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
+import datetime
 import inspect
 import re
-import datetime
-
-from warnings import warn
-
-from typing import Any, Dict, Generic, List, Optional, TYPE_CHECKING, TypeVar, Union
 import typing
+from typing import (TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar,
+                    Union)
+from warnings import warn
 
 import discord.abc
 import discord.utils
-
 from discord.ext import commands
+from discord.message import Message
 from discord.utils import snowflake_time
 
-from discord.message import Message
-
 if TYPE_CHECKING:
-    from . import client
-
-    from typing_extensions import ParamSpec
-
     from discord.abc import MessageableChannel
     from discord.guild import Guild
     from discord.member import Member
     from discord.state import ConnectionState
     from discord.user import ClientUser, User
     from discord.voice_client import VoiceProtocol
+    from typing_extensions import ParamSpec
 
-    from .bot import Bot, AutoShardedBot
+    from . import client
+    from .bot import AutoShardedBot, Bot
     from .cog import Cog
     from .core import Command
     from .help import HelpCommand
@@ -354,7 +349,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         Any
             The result of the help command, if any.
         """
-        from .core import Group, Command, wrap_callback
+        from .core import Command, Group, wrap_callback
         from .errors import CommandError
 
         bot = self.bot
