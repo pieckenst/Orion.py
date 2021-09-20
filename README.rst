@@ -67,7 +67,7 @@ To install the development version, do the following:
 .. code:: sh
 
 
-    $ git clone https://github.com/Discord-Orion/orion.py@Development
+    $ git clone https://github.com/Senarc-Studios/orion.py@Development
     $ cd orion.py
     $ python3 -m pip install -U .[voice]
 
@@ -112,9 +112,9 @@ Bot Example
     import discord
     from discord.ext import commands
 
-    bot = commands.Bot(command_prefix='>')
+    bot = commands.Bot(command_prefix='!', slash_interactions=True)
 
-    @bot.command()
+    @bot.command(slash_interaction=True, message_command=True)
     async def ping(ctx):
         await ctx.send('pong')
 
