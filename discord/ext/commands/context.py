@@ -27,8 +27,8 @@ import datetime
 import inspect
 import re
 import typing
-from typing import (TYPE_CHECKING, Any, Dict, Generic, List, Optional, TypeVar,
-                    Union)
+
+from typing import TYPE_CHECKING, Literal, overload, Any, Dict, Generic, List, Optional, TypeVar, Union
 from warnings import warn
 
 import discord.abc
@@ -37,7 +37,11 @@ from discord.ext import commands
 from discord.message import Message
 from discord.utils import snowflake_time
 
+from datetime import timedelta
+
 if TYPE_CHECKING:
+    from discord.webhook import WebhookMessage
+    from discord.interactions import Interaction
     from discord.abc import MessageableChannel
     from discord.guild import Guild
     from discord.member import Member
@@ -127,6 +131,8 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         or invoked.
     """
 
+    interaction: Optional[Interaction] = None
+
     def __init__(self,
         *,
         message: Message,
@@ -156,6 +162,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         self.subcommand_passed: Optional[str] = subcommand_passed
         self.command_failed: bool = command_failed
         self.current_parameter: Optional[inspect.Parameter] = current_parameter
+        self.ignored_parameters: List[inspect.Parameter] = []
         self._state: ConnectionState = self.message._state
 
     async def invoke(self, command: Command[CogT, P, T], /, *args: P.args, **kwargs: P.kwargs) -> T:
@@ -380,7 +387,6 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         try:
             entity.qualified_name
         except AttributeError:
-            # if we're here then it's not a cog, group, or command.
             return None
 
         await cmd.prepare_help_command(self, entity.qualified_name)
@@ -400,6 +406,70 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         except CommandError as e:
             await cmd.on_help_command_error(self, e)
 
+    @overload
+    async def send(self, content: Optional[str] = None, return_message: Literal[False] = False, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+        ...
+
+    @overload
+    async def send(self, content: Optional[str] = None, return_message: Literal[True] = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+        ...
+
+    async def send(self, content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+        """
+        |coro|
+        A shortcut method to :meth:`.abc.Messageable.send` with interaction helpers.
+        This function takes all the parameters of :meth:`.abc.Messageable.send` plus the following:
+        Parameters
+        ------------
+        return_message: :class:`bool`
+            Ignored if not in a slash interaction context.
+            If this is set to False more native interaction methods will be used.
+        ephemeral: :class:`bool`
+            Ignored if not in a slash interaction context.
+            Indicates if the message should only be visible to the user who started the interaction.
+            If a view is sent with an ephemeral message and it has no timeout set then the timeout
+            is set to 20 minutes.
+        Returns
+        --------
+        Optional[Union[:class:`.Message`, :class:`.WebhookMessage`]]
+            In a slash interaction context, the message that was sent if return_message is True.
+            In a normal context, it always returns a :class:`.Message`
+        """
+
+        if self.interaction is None or (
+            self.interaction.response.responded_at is not None
+            and discord.utils.utcnow() - self.interaction.response.responded_at >= timedelta(minutes=20)
+        ):
+            return await super().send(content, **kwargs)
+
+        kwargs.pop("nonce", None)
+        kwargs.pop("stickers", None)
+        kwargs.pop("reference", None)
+        kwargs.pop("delete_after", None)
+        kwargs.pop("mention_author", None)
+
+        if not (
+            return_message
+            or self.interaction.response.is_done()
+            or any(arg in kwargs for arg in ("file", "files", "allowed_mentions"))
+        ):
+            send = self.interaction.response.send_message
+        else:
+            if not self.interaction.response.is_done():
+                await self.interaction.response.defer(ephemeral=ephemeral)
+
+            send = self.interaction.followup.send
+
+        return await send(content, ephemeral=ephemeral, **kwargs)  # type: ignore
+
+    @overload
+    async def reply(self, content: Optional[str] = None, return_message: Literal[False] = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+        ...
+
+    @overload
+    async def reply(self, content: Optional[str] = None, return_message: Literal[True] = True, **kwargs: Any) -> Union[Message, WebhookMessage]:
+        ...
+
     @discord.utils.copy_doc(Message.reply)
-    async def reply(self, content: Optional[str] = None, **kwargs: Any) -> Message:
-        return await self.message.reply(content, **kwargs)
+    async def reply(self, content: Optional[str] = None, return_message: bool = True, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+        return await self.send(content, return_message=return_message, reference=self.message, **kwargs)  # type: ignore
