@@ -148,11 +148,17 @@ class Attachment(Hashable):
         The attachment's `media type <https://en.wikipedia.org/wiki/Media_type>`_
 
         .. versionadded:: 1.7
+
+    ephemeral: Optional[:class:`bool`]
+        If the attachment is ephemeral. Ephemeral attachments are temporary and
+        will automatically be removed after the set time.
+        .. versionadded:: 2.2
     """
 
-    __slots__ = ('id', 'size', 'height', 'width', 'filename', 'url', 'proxy_url', '_http', 'content_type')
+    __slots__ = ('ephemeral', 'id', 'size', 'height', 'width', 'filename', 'url', 'proxy_url', '_http', 'content_type')
 
     def __init__(self, *, data: AttachmentPayload, state: ConnectionState):
+        self.ephemeral: Optional[str] = data.get('ephemeral')
         self.id: int = int(data['id'])
         self.size: int = data['size']
         self.height: Optional[int] = data.get('height')
