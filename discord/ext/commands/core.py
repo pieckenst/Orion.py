@@ -1112,7 +1112,7 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
         if ctx.interaction is None and (self.message_command is False or (self.message_command is None and not ctx.bot.message_commands)):
             raise DisabledCommand(f"{self.name} command cannot be run as a message command.")
 
-        if ctx.interaction is not None and (self.slash_interaction is False or (self.slash_interaction is None and not ctx.bot.slash_interacion)):
+        if ctx.interaction is not None and (self.slash_interaction is False or (self.slash_interaction is None and not ctx.bot.slash_interactions)):
             raise DisabledCommand(f"{self.name} command cannot be run as a slash interacion.")
 
         original = ctx.command
