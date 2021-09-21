@@ -24,14 +24,10 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, SupportsInt, Union
+
 from . import utils
 from .mixins import Hashable
-
-from typing import (
-    SupportsInt,
-    TYPE_CHECKING,
-    Union,
-)
 
 if TYPE_CHECKING:
     import datetime
@@ -90,3 +86,18 @@ class Object(Hashable):
     def created_at(self) -> datetime.datetime:
         """:class:`datetime.datetime`: Returns the snowflake's creation time in UTC."""
         return utils.snowflake_time(self.id)
+
+    @property
+    def worker_id(self) -> int:
+        """returns the worker id that made the user id when the user id was generate as :class:`int`: """
+        return (self.id & 0x3E0000) >>17
+
+    @property
+    def process_id(self) -> int:
+        """returns the process id that made the user id when the user id was generate as :class:`int`: """
+        return (self.id & 0x1F000) >> 12
+    
+    @property
+    def increment(self) -> int:
+        """returns the increment id that made the user id when the user id was generate as :class:`int`: """
+        return (self.id & 0xFFF)

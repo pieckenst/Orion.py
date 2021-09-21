@@ -24,34 +24,24 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-import re
 import inspect
-from typing import (
-    Any,
-    Dict,
-    Generic,
-    Iterable,
-    Literal,
-    Optional,
-    TYPE_CHECKING,
-    List,
-    Protocol,
-    Type,
-    TypeVar,
-    Tuple,
-    Union,
-    runtime_checkable,
-)
+import re
+from typing import (TYPE_CHECKING, Any, Dict, Generic, Iterable, List, Literal,
+                    Optional, Protocol, Tuple, Type, TypeVar, Union,
+                    runtime_checkable)
 
 import discord
+
 from .errors import *
 
 if TYPE_CHECKING:
-    from .context import Context
     from discord.message import PartialMessageableChannel
+
+    from .context import Context
 
 
 __all__ = (
+    "Option",
     'Converter',
     'ObjectConverter',
     'MemberConverter',
@@ -95,7 +85,7 @@ T = TypeVar('T')
 T_co = TypeVar('T_co', covariant=True)
 CT = TypeVar('CT', bound=discord.abc.GuildChannel)
 TT = TypeVar('TT', bound=discord.Thread)
-
+DT = TypeVar("DT", bound=str)
 
 @runtime_checkable
 class Converter(Protocol[T_co]):
@@ -1004,6 +994,19 @@ class Greedy(List[T]):
 
         return cls(converter=converter)
 
+if TYPE_CHECKING:
+    def Option(default: T = inspect.Parameter.empty, *, description: str) -> T:
+        ...
+
+else:
+    class Option(Generic[T, DT]):
+        description: DT
+        default: Union[T, inspect.Parameter.empty]
+        __slots__ = ("default", "description")
+
+        def __init__(self, default: T = inspect.Parameter.empty, *, description: DT) -> None:
+            self.description = description
+            self.default = default
 
 def _convert_to_bool(argument: str) -> bool:
     lowered = argument.lower()

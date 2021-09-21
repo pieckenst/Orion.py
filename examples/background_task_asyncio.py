@@ -1,5 +1,7 @@
-import discord
 import asyncio
+
+import discord
+
 
 class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
@@ -23,4 +25,4 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run('token')
+client.run('your-token-here')

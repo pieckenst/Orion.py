@@ -1,6 +1,5 @@
-from discord.ext import commands
-
 import discord
+from discord.ext import commands
 
 
 class Bot(commands.Bot):
@@ -54,4 +53,4 @@ async def ask(ctx: commands.Context):
         print('Cancelled...')
 
 
-bot.run('token')
+bot.run('your-token-here')

@@ -1,6 +1,8 @@
-import discord
-import random
 import asyncio
+import random
+
+import discord
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -31,4 +33,4 @@ class MyClient(discord.Client):
                 await message.channel.send(f'Oops. It is actually {answer}.')
 
 client = MyClient()
-client.run('token')
+client.run('your-token-here')

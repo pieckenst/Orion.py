@@ -1,5 +1,7 @@
-import discord
 import asyncio
+
+import discord
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -17,4 +19,4 @@ class MyClient(discord.Client):
         await before.channel.send(msg)
 
 client = MyClient()
-client.run('token')
+client.run('your-token-here')

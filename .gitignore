@@ -17,3 +17,5 @@ docs/crowdin.py
 *.mo
 .pypirc
 *.gz
+**/__pycache__
+.vscode

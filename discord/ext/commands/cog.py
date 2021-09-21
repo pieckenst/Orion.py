@@ -24,10 +24,14 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import inspect
+import typing
+from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Dict, Generator,
+                    List, Optional, Tuple, Type, TypeVar)
+
+import discord
 import discord.utils
 
-from typing import Any, Callable, ClassVar, Dict, Generator, List, Optional, TYPE_CHECKING, Tuple, TypeVar, Type
-
+from ...error import IncorrectFormat, IncorrectGuildIDType
 from ._types import _BaseCommand
 
 if TYPE_CHECKING:
@@ -44,6 +48,26 @@ CogT = TypeVar('CogT', bound='Cog')
 FuncT = TypeVar('FuncT', bound=Callable[..., Any])
 
 MISSING: Any = discord.utils.MISSING
+
+
+
+
+def permission(guild_id: int, permissions: list):
+    """
+    Decorator that add permissions. This will set the permissions for a single guild, you can use it more than once for each command.
+    :param guild_id: ID of the guild for the permissions.
+    :type guild_id: int
+    :param permissions: List of permissions to be set for the specified guild.
+    :type permissions: list
+    """
+
+    def wrapper(cmd):
+        if not getattr(cmd, "__permissions__", None):
+            cmd.__permissions__ = {}
+        cmd.__permissions__[guild_id] = permissions
+        return cmd
+
+    return wrapper
 
 class CogMeta(type):
     """A metaclass for defining a cog.

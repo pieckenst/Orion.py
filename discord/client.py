@@ -29,49 +29,51 @@ import logging
 import signal
 import sys
 import traceback
-from typing import Any, Callable, Coroutine, Dict, Generator, List, Optional, Sequence, TYPE_CHECKING, Tuple, TypeVar, Union
+from typing import (TYPE_CHECKING, Any, Callable, Coroutine, Dict, Generator,
+                    List, Optional, Sequence, Tuple, TypeVar, Union)
 
 import aiohttp
 
-from .user import User, ClientUser
-from .invite import Invite
-from .template import Template
-from .widget import Widget
-from .guild import Guild
+from . import utils
+from .activity import ActivityTypes, BaseActivity, create_activity
+from .appinfo import AppInfo
+from .backoff import ExponentialBackoff
+from .channel import PartialMessageable, _threaded_channel_factory
 from .emoji import Emoji
-from .channel import _threaded_channel_factory, PartialMessageable
-from .enums import ChannelType
-from .mentions import AllowedMentions
+from .enums import ChannelType, Status, VoiceRegion
 from .errors import *
-from .enums import Status, VoiceRegion
 from .flags import ApplicationFlags, Intents
 from .gateway import *
-from .activity import ActivityTypes, BaseActivity, create_activity
-from .voice_client import VoiceClient
+from .guild import Guild
 from .http import HTTPClient
-from .state import ConnectionState
-from . import utils
-from .utils import MISSING
-from .object import Object
-from .backoff import ExponentialBackoff
-from .webhook import Webhook
+from .invite import Invite
 from .iterators import GuildIterator
-from .appinfo import AppInfo
-from .ui.view import View
+from .mentions import AllowedMentions
+from .object import Object
 from .stage_instance import StageInstance
+from .state import ConnectionState
+from .sticker import (GuildSticker, StandardSticker, StickerPack,
+                      _sticker_factory)
+from .template import Template
 from .threads import Thread
-from .sticker import GuildSticker, StandardSticker, StickerPack, _sticker_factory
+from .ui.view import View
+from .user import ClientUser, User
+from .utils import MISSING
+from .voice_client import VoiceClient
+from .webhook import Webhook
+from .widget import Widget
 
 if TYPE_CHECKING:
-    from .abc import SnowflakeTime, PrivateChannel, GuildChannel, Snowflake
+    from .abc import GuildChannel, PrivateChannel, Snowflake, SnowflakeTime
     from .channel import DMChannel
-    from .message import Message
     from .member import Member
+    from .message import Message
     from .voice_client import VoiceProtocol
 
 __all__ = (
     'Client',
 )
+
 
 Coro = TypeVar('Coro', bound=Callable[..., Coroutine[Any, Any, Any]])
 
@@ -595,7 +597,7 @@ class Client:
     async def start(self, token: str, *, reconnect: bool = True) -> None:
         """|coro|
 
-        A shorthand coroutine for :meth:`login` + :meth:`connect`.
+        A shorthand coroutine for :meth:`login` + :meth: `setup` + :meth:`connect`.
 
         Raises
         -------
@@ -603,7 +605,17 @@ class Client:
             An unexpected keyword argument was received.
         """
         await self.login(token)
+        await self.setup()
         await self.connect(reconnect=reconnect)
+
+    async def setup(self) -> Any:
+        """|coro|
+        A coroutine to be called to setup the bot, this is blank by default.
+        To perform asynchronous setup after the bot is logged in but before
+        it needs connected to the Websocket, and overwrite this coroutine.
+        .. versionadded:: 2.2.3
+        """
+        pass
 
     def run(self, *args: Any, **kwargs: Any) -> None:
         """A blocking call that abstracts away the event loop

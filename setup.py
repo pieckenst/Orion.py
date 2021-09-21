@@ -33,13 +33,13 @@ packages = [
 setup(name='orion.py',
       author='Benitz Original',
       author_email="benitz@numix.xyz",
-      url='https://github.com/Discord-Orion/Orion.py',
+      url='https://github.com/Senarc-Studios/Orion.py',
       project_urls={
         "Documentation": "https://discordpy.readthedocs.io/en/latest/",
-        "Issue tracker": "https://github.com/Discord-Orion/Orion.py/issues",
-        "Development Branch": "https://github.com/Discord-Orion/Orion.py/tree/Development"
+        "Issue tracker": "https://github.com/Senarc-Studios/Orion.py/issues",
+        "Development Branch": "https://github.com/Senarc-Studios/Orion.py/tree/Development"
       },
-      version="2.1.1",
+      version="2.2.3",
       packages=packages,
       license='MIT',
       description='A improved and revived version of the original discord.py',

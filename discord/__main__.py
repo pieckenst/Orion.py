@@ -23,13 +23,15 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import argparse
+import platform
 import sys
 from pathlib import Path
 
-import discord
-import pkg_resources
 import aiohttp
-import platform
+import pkg_resources
+
+import discord
+
 
 def show_version():
     entries = []
@@ -195,7 +197,7 @@ def newbot(parser, args):
     try:
         new_directory.mkdir(exist_ok=True, parents=True)
     except OSError as exc:
-        parser.error(f'could not create our bot directory ({exc})')
+        parser.error(f'WARNING: Could not create our bot directory ({exc}).')
 
     cogs = new_directory / 'cogs'
 
@@ -204,36 +206,36 @@ def newbot(parser, args):
         init = cogs / '__init__.py'
         init.touch()
     except OSError as exc:
-        print(f'warning: could not create cogs directory ({exc})')
+        print(f'WARNING: Could not create cogs directory ({exc}).')
 
     try:
         with open(str(new_directory / 'config.py'), 'w', encoding='utf-8') as fp:
-            fp.write('token = "place your token here"\ncogs = []\n')
+            fp.write('token = "your-token-here"\ncogs = []\n')
     except OSError as exc:
-        parser.error(f'could not create config file ({exc})')
+        parser.error(f'WARNING: Could not create config file ({exc}).')
 
     try:
         with open(str(new_directory / 'bot.py'), 'w', encoding='utf-8') as fp:
             base = 'Bot' if not args.sharded else 'AutoShardedBot'
             fp.write(_bot_template.format(base=base, prefix=args.prefix))
     except OSError as exc:
-        parser.error(f'could not create bot file ({exc})')
+        parser.error(f'WARNING: Could not create bot file ({exc}).')
 
     if not args.no_git:
         try:
             with open(str(new_directory / '.gitignore'), 'w', encoding='utf-8') as fp:
                 fp.write(_gitignore_template)
         except OSError as exc:
-            print(f'warning: could not create .gitignore file ({exc})')
+            print(f'WARNING: Could not create .gitignore file ({exc}).')
 
-    print('successfully made bot at', new_directory)
+    print(f'Successfully created bot at {new_directory}!')
 
 def newcog(parser, args):
     cog_dir = to_path(parser, args.directory)
     try:
         cog_dir.mkdir(exist_ok=True)
     except OSError as exc:
-        print(f'warning: could not create cogs directory ({exc})')
+        print(f'WARNING: Could not create cogs directory ({exc}).')
 
     directory = cog_dir / to_path(parser, args.name)
     directory = directory.with_suffix('.py')
@@ -257,34 +259,34 @@ def newcog(parser, args):
                 attrs += ', command_attrs=dict(hidden=True)'
             fp.write(_cog_template.format(name=name, extra=extra, attrs=attrs))
     except OSError as exc:
-        parser.error(f'could not create cog file ({exc})')
+        parser.error(f'WARNING: Could not create cog file ({exc}).')
     else:
-        print('successfully made cog at', directory)
+        print(f'Succesfully created cog at {directory}!')
 
 def add_newbot_args(subparser):
-    parser = subparser.add_parser('newbot', help='creates a command bot project quickly')
+    parser = subparser.add_parser('newbot', help='Creates a command bot project quickly')
     parser.set_defaults(func=newbot)
 
-    parser.add_argument('name', help='the bot project name')
-    parser.add_argument('directory', help='the directory to place it in (default: .)', nargs='?', default=Path.cwd())
-    parser.add_argument('--prefix', help='the bot prefix (default: $)', default='$', metavar='<prefix>')
-    parser.add_argument('--sharded', help='whether to use AutoShardedBot', action='store_true')
-    parser.add_argument('--no-git', help='do not create a .gitignore file', action='store_true', dest='no_git')
+    parser.add_argument('name', help='The bot project name')
+    parser.add_argument('directory', help='The directory to place it in (default: .)', nargs='?', default=Path.cwd())
+    parser.add_argument('--prefix', help='The bot prefix (default: $)', default='$', metavar='<prefix>')
+    parser.add_argument('--sharded', help='Whether to use AutoShardedBot', action='store_true')
+    parser.add_argument('--no-git', help='Do not create a .gitignore file', action='store_true', dest='no_git')
 
 def add_newcog_args(subparser):
-    parser = subparser.add_parser('newcog', help='creates a new cog template quickly')
+    parser = subparser.add_parser('newcog', help='Creates a new cog template quickly')
     parser.set_defaults(func=newcog)
 
-    parser.add_argument('name', help='the cog name')
-    parser.add_argument('directory', help='the directory to place it in (default: cogs)', nargs='?', default=Path('cogs'))
-    parser.add_argument('--class-name', help='the class name of the cog (default: <name>)', dest='class_name')
-    parser.add_argument('--display-name', help='the cog name (default: <name>)')
-    parser.add_argument('--hide-commands', help='whether to hide all commands in the cog', action='store_true')
-    parser.add_argument('--full', help='add all special methods as well', action='store_true')
+    parser.add_argument('name', help='The cog name')
+    parser.add_argument('directory', help='The directory to place it in (default: cogs)', nargs='?', default=Path('cogs'))
+    parser.add_argument('--class-name', help='The class name of the cog (default: <name>)', dest='class_name')
+    parser.add_argument('--display-name', help='The cog name (default: <name>)')
+    parser.add_argument('--hide-commands', help='Whether to hide all commands in the cog', action='store_true')
+    parser.add_argument('--full', help='Add all special methods as well', action='store_true')
 
 def parse_args():
-    parser = argparse.ArgumentParser(prog='discord', description='Tools for helping with orion.py')
-    parser.add_argument('-v', '--version', action='store_true', help='shows the library version')
+    parser = argparse.ArgumentParser(prog='discord', description='Tools for helping with Orion.py')
+    parser.add_argument('-v', '--version', action='store_true', help='Displays the library version')
     parser.set_defaults(func=core)
 
     subparser = parser.add_subparsers(dest='subcommand', title='subcommands')

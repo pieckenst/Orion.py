@@ -2,7 +2,6 @@ import asyncio
 
 import discord
 import youtube_dl
-
 from discord.ext import commands
 
 # Suppress noise about console usage from errors
@@ -132,4 +131,4 @@ async def on_ready():
     print('------')
 
 bot.add_cog(Music(bot))
-bot.run('token')
+bot.run('your-token-here')

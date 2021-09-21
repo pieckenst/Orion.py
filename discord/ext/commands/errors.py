@@ -24,23 +24,27 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Optional, Any, TYPE_CHECKING, List, Callable, Type, Tuple, Union
+from typing import (TYPE_CHECKING, Any, Callable, List, Optional, Tuple, Type,
+                    Union)
 
 from discord.errors import ClientException, DiscordException
 
 if TYPE_CHECKING:
+    from .core import Command
     from inspect import Parameter
 
-    from .converter import Converter
-    from .context import Context
-    from .cooldowns import Cooldown, BucketType
-    from .flags import Flag
     from discord.abc import GuildChannel
     from discord.threads import Thread
     from discord.types.snowflake import Snowflake, SnowflakeList
 
+    from .context import Context
+    from .converter import Converter
+    from .cooldowns import BucketType, Cooldown
+    from .flags import Flag
+
 
 __all__ = (
+    'ApplicationCommandRegistrationError',
     'CommandError',
     'MissingRequiredArgument',
     'BadArgument',
@@ -99,6 +103,21 @@ __all__ = (
     'TooManyFlags',
     'MissingRequiredFlag',
 )
+
+class ApplicationCommandRegistrationError(ClientException):
+    """An exception raised when a command cannot be converted to an
+    application command.
+    This inherits from :exc:`discord.ClientException`
+    .. versionadded:: 2.0
+    Attributes
+    ----------
+    command: :class:`Command`
+        The command that failed to be converted.
+    """
+
+    def __init__(self, command: Command, msg: str = None) -> None:
+        self.command = command
+        super().__init__(msg or f"{command.qualified_name} failed while converting to an application command.")
 
 class CommandError(DiscordException):
     r"""The base exception type for all command related errors.

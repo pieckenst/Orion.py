@@ -23,15 +23,16 @@ DEALINGS IN THE SOFTWARE.
 """
 
 from __future__ import annotations
-from typing import Type, TypeVar, Union, List, TYPE_CHECKING, Any, Union
+
+from typing import TYPE_CHECKING, Any, List, Type, TypeVar, Union
 
 __all__ = (
     'AllowedMentions',
 )
 
 if TYPE_CHECKING:
-    from .types.message import AllowedMentions as AllowedMentionsPayload
     from .abc import Snowflake
+    from .types.message import AllowedMentions as AllowedMentionsPayload
 
 
 class _FakeBool:
@@ -110,6 +111,16 @@ class AllowedMentions:
         .. versionadded:: 1.5
         """
         return cls(everyone=False, users=False, roles=False, replied_user=False)
+
+    
+    @classmethod
+    def default(cls: Type[A]) -> A:
+        """A factory method that returns a :class:`AllowedMentions` with all potential massive ping fields explicitly set to ``False``
+
+        .. versionadded:: 2.0
+        """
+        return cls(everyone=False, users=True, roles=False, replied_user=True)
+    
 
     def to_dict(self) -> AllowedMentionsPayload:
         parse = []

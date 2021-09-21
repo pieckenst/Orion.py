@@ -1,6 +1,5 @@
-from discord.ext import commands
-
 import discord
+from discord.ext import commands
 
 
 class CounterBot(commands.Bot):
@@ -40,4 +39,4 @@ async def counter(ctx: commands.Context):
     await ctx.send('Press!', view=Counter())
 
 
-bot.run('token')
+bot.run('your-token-here')

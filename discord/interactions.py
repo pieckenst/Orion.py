@@ -25,20 +25,20 @@ DEALINGS IN THE SOFTWARE.
 """
 
 from __future__ import annotations
-from typing import Any, Dict, List, Optional, TYPE_CHECKING, Tuple, Union
+
 import asyncio
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 from . import utils
-from .enums import try_enum, InteractionType, InteractionResponseType
-from .errors import InteractionResponded, HTTPException, ClientException
-from .channel import PartialMessageable, ChannelType
-
-from .user import User
+from .channel import ChannelType, PartialMessageable
+from .enums import InteractionResponseType, InteractionType, try_enum
+from .errors import ClientException, HTTPException, InteractionResponded
 from .member import Member
-from .message import Message, Attachment
+from .message import Attachment, Message
 from .object import Object
 from .permissions import Permissions
-from .webhook.async_ import async_context, Webhook, handle_message_parameters
+from .user import User
+from .webhook.async_ import Webhook, async_context, handle_message_parameters
 
 __all__ = (
     'Interaction',
@@ -47,19 +47,20 @@ __all__ = (
 )
 
 if TYPE_CHECKING:
-    from .types.interactions import (
-        Interaction as InteractionPayload,
-        InteractionData,
-    )
-    from .guild import Guild
-    from .state import ConnectionState
-    from .file import File
-    from .mentions import AllowedMentions
+    from datetime import datetime
     from aiohttp import ClientSession
+
+    from .channel import (CategoryChannel, PartialMessageable, StageChannel,
+                          StoreChannel, TextChannel, VoiceChannel)
     from .embeds import Embed
-    from .ui.view import View
-    from .channel import VoiceChannel, StageChannel, TextChannel, CategoryChannel, StoreChannel, PartialMessageable
+    from .file import File
+    from .guild import Guild
+    from .mentions import AllowedMentions
+    from .state import ConnectionState
     from .threads import Thread
+    from .types.interactions import Interaction as InteractionPayload
+    from .types.interactions import InteractionData
+    from .ui.view import View
 
     InteractionChannel = Union[
         VoiceChannel, StageChannel, TextChannel, CategoryChannel, StoreChannel, Thread, PartialMessageable
@@ -369,20 +370,20 @@ class InteractionResponse:
     """
 
     __slots__: Tuple[str, ...] = (
-        '_responded',
+        'responded_at',
         '_parent',
     )
 
     def __init__(self, parent: Interaction):
         self._parent: Interaction = parent
-        self._responded: bool = False
+        self.responded_at: Optional[datetime] = None
 
     def is_done(self) -> bool:
         """:class:`bool`: Indicates whether an interaction response has been done before.
 
         An interaction can only be responded to once.
         """
-        return self._responded
+        return self.responded_at is not None
 
     async def defer(self, *, ephemeral: bool = False) -> None:
         """|coro|
@@ -405,7 +406,7 @@ class InteractionResponse:
         InteractionResponded
             This interaction has already been responded to before.
         """
-        if self._responded:
+        if self.is_done():
             raise InteractionResponded(self._parent)
 
         defer_type: int = 0
@@ -423,7 +424,7 @@ class InteractionResponse:
             await adapter.create_interaction_response(
                 parent.id, parent.token, session=parent._session, type=defer_type, data=data
             )
-            self._responded = True
+            self.responded_at = utils.utcnow()
 
     async def pong(self) -> None:
         """|coro|
@@ -439,7 +440,7 @@ class InteractionResponse:
         InteractionResponded
             This interaction has already been responded to before.
         """
-        if self._responded:
+        if self.is_done():
             raise InteractionResponded(self._parent)
 
         parent = self._parent
@@ -448,7 +449,7 @@ class InteractionResponse:
             await adapter.create_interaction_response(
                 parent.id, parent.token, session=parent._session, type=InteractionResponseType.pong.value
             )
-            self._responded = True
+            self.responded_at = utils.utcnow()
 
     async def send_message(
         self,
@@ -494,7 +495,7 @@ class InteractionResponse:
         InteractionResponded
             This interaction has already been responded to before.
         """
-        if self._responded:
+        if self.is_done():
             raise InteractionResponded(self._parent)
 
         payload: Dict[str, Any] = {
@@ -537,7 +538,7 @@ class InteractionResponse:
 
             self._parent._state.store_view(view)
 
-        self._responded = True
+        self.responded_at = utils.utcnow()
 
     async def edit_message(
         self,
@@ -578,7 +579,7 @@ class InteractionResponse:
         InteractionResponded
             This interaction has already been responded to before.
         """
-        if self._responded:
+        if self.is_done():
             raise InteractionResponded(self._parent)
 
         parent = self._parent
@@ -629,7 +630,7 @@ class InteractionResponse:
         if view and not view.is_finished():
             state.store_view(view, message_id)
 
-        self._responded = True
+        self.responded_at = utils.utcnow()
 
 
 class _InteractionMessageState:

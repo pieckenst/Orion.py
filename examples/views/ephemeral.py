@@ -1,6 +1,6 @@
+import discord
 from discord.ext import commands
 
-import discord
 
 class EphemeralCounterBot(commands.Bot):
     def __init__(self):
@@ -44,4 +44,4 @@ async def counter(ctx: commands.Context):
     """Starts a counter for pressing."""
     await ctx.send('Press!', view=EphemeralCounter())
 
-bot.run('token')
+bot.run('your-token-here')

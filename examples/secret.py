@@ -93,4 +93,4 @@ async def emoji(ctx: commands.Context, emoji: discord.PartialEmoji, *roles: disc
     )
 
 
-bot.run('token')
+bot.run('your-token-here')
