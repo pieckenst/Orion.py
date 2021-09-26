@@ -18,13 +18,7 @@ __version__ = '2.0.0a'
 __path__ = __import__('pkgutil').extend_path(__path__, __name__)
 
 import logging
-
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal # For cloudfare (python 3.7)
-
-from typing import NamedTuple
+from typing import Literal, NamedTuple
 
 from . import abc, opus, ui, utils
 from .activity import *
