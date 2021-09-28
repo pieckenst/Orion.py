@@ -39,6 +39,8 @@ if TYPE_CHECKING:
     from .interactions import Interaction
 
 __all__ = (
+    'NoEntryPointError',
+    'ExtensionError',
     'DiscordException',
     'ClientException',
     'NoMoreItems',
@@ -55,7 +57,6 @@ __all__ = (
     'InteractionResponded',
 )
 
-
 class DiscordException(Exception):
     """Base exception class for discord.py
 
@@ -64,6 +65,30 @@ class DiscordException(Exception):
 
     pass
 
+class ExtensionError(DiscordException):
+    """Base exception for extension related errors.
+
+    This inherits from :exc:`~discord.DiscordException`.
+
+    Attributes
+    ------------
+    name: :class:`str`
+        The extension that had an error.
+    """
+    def __init__(self, message: Optional[str] = None, *args: Any, name: str) -> None:
+        self.name: str = name
+        message = message or f'Extension {name!r} had an error.'
+        # clean-up @everyone and @here mentions
+        m = message.replace('@everyone', '@\u200beveryone').replace('@here', '@\u200bhere')
+        super().__init__(m, *args)
+
+class NoEntryPointError(ExtensionError):
+    """An exception raised when an extension does not have a ``setup`` entry point function.
+
+    This inherits from :exc:`ExtensionError`
+    """
+    def __init__(self, name: str) -> None:
+        super().__init__(f"Extension {name!r} has no 'setup' function.", name=name)
 
 class ClientException(DiscordException):
     """Exception that's raised when an operation in the :class:`Client` fails.
