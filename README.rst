@@ -128,3 +128,8 @@ Links
 - `Documentation <https://discordpy.readthedocs.io/en/latest/index.html>`_
 - `Official Discord Server <https://discord.gg/zzdEGHbkTj>`_
 - `Discord API <https://discord.gg/discord-api>`_
+
+Outsourced Credits
+------------------
+
+`Gnome <https://github.com/Gnome-py>`_ - Slash interactions and ephemeral messages.
