@@ -1447,7 +1447,7 @@ class Messageable:
         }
         if hasattr(self, 'permissions_for'):
             channel = self
-        elif hasattr(self, 'channel') and not type(self.channel).__name__ in ('DMChannel', 'GroupChannel')
+        elif hasattr(self, 'channel') and not type(self.channel).__name__ in ('DMChannel', 'GroupChannel'):
             channel = self.channel
         else:
             return True
