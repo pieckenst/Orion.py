@@ -1427,6 +1427,52 @@ class Messageable:
             await ret.delete(delay=delete_after)
         return ret
 
+    def can_send(self, *objects) -> bool:
+        """Returns a :class:`bool` A function that checks if the message can be sent.
+            Raises
+            ------
+            TypeError
+                A invalid type has passed.
+            Returns
+            --------
+            :class:`bool`
+                Returns a boolean of wheather the message can be sent or not.
+        """
+        mapping = {
+            'Message': 'send_messages',
+            'Embed': 'embed_links',
+            'File': 'attach_files',
+            'Emoji': 'use_external_emojis',
+            'GuildSticker': 'use_external_stickers',
+        }
+        if hasattr(self, 'permissions_for'):
+            channel = self
+        elif hasattr(self, 'channel') and not type(self.channel).__name__ in ('DMChannel', 'GroupChannel')
+            channel = self.channel
+        else:
+            return True
+
+
+        objects = (None, ) + objects
+
+        for obj in objects:
+            try:
+                if obj is None:
+                    permission = mapping['Message']
+                else:
+                    permission = mapping.get(type(obj).__name__) or mapping[obj.__name__]
+                if type(obj).__name__ == 'Emoji':
+                    if obj._to_partial().is_unicode_emoji or obj.guild_id == channel.guild.id:
+                        continue
+                elif type(obj).__name__ == 'GuildSticker':
+                    if obj.guild_id == channel.guild.id:
+                        continue
+            except (KeyError, AttributeError):
+                raise TypeError(f'The object type \'{obj}\' is of an invalid.')
+            if not getattr(channel.permissions_for(channel.guild.me), permission):
+                return False
+        return True 
+
     async def trigger_typing(self) -> None:
         """|coro|
 
