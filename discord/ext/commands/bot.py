@@ -32,15 +32,25 @@ import inspect
 import sys
 import traceback
 import types
-from typing import (TYPE_CHECKING, Any, Callable, Dict, List, Mapping,
+from typing import (TYPE_CHECKING, Any, Callable, Iterable, Tuple, cast, Dict, List, Mapping,
                     Optional, Type, TypeVar, Union)
+from collections import defaultdict
+from ...types.interactions import ApplicationCommandInteractionData, ApplicationCommandInteractionDataOption,EditApplicationCommand, _ApplicationCommandInteractionDataOptionString
+from .converter import Greedy
+from .view import StringView, supported_quotes
+from ...message import PartialMessage
+from ...flags import Intents
+from ...interactions import Interaction
+from ...enums import InteractionType
 
-from ... import AutoShardedClient, Client, ClientException, User, errors, utils
+from ... import AutoShardedClient, Client, ClientException, User, Member, TextChannel, DMChannel, Thread, errors, utils, PartialMessageable
+from ...http import HTTPClient
 from .cog import Cog
 from .context import Context
 from .core import GroupMixin
 from .help import DefaultHelpCommand, HelpCommand
 from .view import StringView
+from .flags import FlagConverter
 
 if TYPE_CHECKING:
     import importlib.machinery
@@ -61,6 +71,20 @@ MISSING: Any = utils.MISSING
 T = TypeVar('T')
 CFT = TypeVar('CFT', bound='CoroFunc')
 CXT = TypeVar('CXT', bound='Context')
+
+class CustomSlashMessage(PartialMessage):
+    activity = application = edited_at = reference = webhook_id = None
+    attachments = components = reactions = stickers = mentions = []
+    author: Union[User, Member]
+    tts = False
+
+    @classmethod
+    def from_interaction(cls, interaction: Interaction, channel: Union[TextChannel, DMChannel, Thread]):
+        self = cls(channel=channel, id=interaction.id)
+        assert interaction.user is not None
+        self.author = interaction.user
+
+        return self
 
 def when_mentioned(bot: Union[Bot, AutoShardedBot], msg: Message) -> List[str]:
     """A callable that implements a command prefix equivalent to being mentioned.
@@ -109,6 +133,25 @@ def when_mentioned_or(*prefixes: str) -> Callable[[Union[Bot, AutoShardedBot], M
 def _is_submodule(parent: str, child: str) -> bool:
     return parent == child or child.startswith(parent + ".")
 
+def _unwrap_slash_groups(data: ApplicationCommandInteractionData) -> Tuple[str, List[ApplicationCommandInteractionDataOption]]:
+    command_name = data["name"]
+    command_options = data.get("options") or []
+    while any(o["type"] in {1, 2} for o in command_options):  # type: ignore
+        for option in command_options:  # type: ignore
+            if option["type"] in {1, 2}:  # type: ignore
+                command_name += f' {option["name"]}'  # type: ignore
+                command_options = option.get("options") or []
+
+    return command_name, command_options
+
+
+def _quote_string_safe(string: str) -> str:
+    for open, close in supported_quotes.items():
+        if open not in string and close not in string:
+            return f"{open}{string}{close}"
+
+    raise errors.UnexpectedQuoteError(string)
+
 class _DefaultRepr:
     def __repr__(self):
         return '<default-help-command>'
@@ -116,8 +159,10 @@ class _DefaultRepr:
 _default = _DefaultRepr()
 
 class BotBase(GroupMixin):
-    def __init__(self, command_prefix, help_command=_default, description=None, **options):
+    def __init__(self, command_prefix, help_command=_default, description=None, message_commands: bool = True, slash_interactions: bool = False, **options):
         super().__init__(**options)
+        self.slash_interactions = slash_interactions
+        self.message_commands = message_commands
         self.command_prefix = command_prefix
         self.extra_events: Dict[str, List[CoroFunc]] = {}
         self.__cogs: Dict[str, Cog] = {}
@@ -131,6 +176,10 @@ class BotBase(GroupMixin):
         self.owner_id = options.get('owner_id')
         self.owner_ids = options.get('owner_ids', set())
         self.strip_after_prefix = options.get('strip_after_prefix', False)
+        self.slash_interaction_guilds: Optional[Iterable[int]] = options.get("slash_interaction_guilds", None)
+
+        if not (message_commands or slash_interactions):
+            raise ValueError("Both message_commands and slash_interactions are disabled.")
 
         if self.owner_id and self.owner_ids:
             raise TypeError('Both owner_id and owner_ids are set.')
@@ -151,6 +200,44 @@ class BotBase(GroupMixin):
         ev = 'on_' + event_name
         for event in self.extra_events.get(ev, []):
             self._schedule_event(event, ev, *args, **kwargs)  # type: ignore
+
+    async def setup(self):
+        await self.create_slash_interaction()
+
+    async def create_slash_interaction(self):
+        commands: defaultdict[Optional[int], List[EditApplicationCommand]] = defaultdict(list)
+        for command in self.commands:
+            if command.hidden or (command.slash_interaction is None and not self.slash_interactions):
+                continue
+
+            try:
+                payload = command.to_application_command()
+            except Exception:
+                raise errors.ApplicationCommandRegistrationError(command)
+
+            if payload is None:
+                continue
+
+            guilds = command.slash_interaction_guilds or self.slash_interaction_guilds
+            if guilds is None:
+                commands[None].append(payload)
+            else:
+                for guild in guilds:
+                    commands[guild].append(payload)
+
+        http: HTTPClient = self.http  # type: ignore
+        global_commands = commands.pop(None, None)
+        application_id = self.application_id or (await self.application_info()).id  # type: ignore
+        if global_commands is not None:
+            if self.slash_interaction_guilds is None:
+                await http.bulk_upsert_global_commands(payload=global_commands, application_id=application_id)
+            else:
+                for guild in self.slash_interaction_guilds:
+                    await http.bulk_upsert_guild_commands(guild_id=guild, payload=global_commands, application_id=application_id)
+
+        for guild, guild_commands in commands.items():
+            assert guild is not None
+            await http.bulk_upsert_guild_commands(guild_id=guild, payload=guild_commands, application_id=application_id)
 
     @utils.copy_doc(Client.close)
     async def close(self) -> None:
@@ -1026,8 +1113,83 @@ class BotBase(GroupMixin):
         ctx = await self.get_context(message)
         await self.invoke(ctx)
 
+    async def process_slash_interaction(self, interaction: Interaction):
+        """|coro|
+        This function processes a slash command interaction into a usable
+        message and calls :meth:`.process_commands` based on it. Without this
+        coroutine slash commands will not be triggered.
+        By default, this coroutine is called inside the :func:`.on_interaction`
+        event. If you choose to override the :func:`.on_interaction` event,
+        then you should invoke this coroutine as well.
+        .. versionadded:: 2.0
+        Parameters
+        -----------
+        interaction: :class:`discord.Interaction`
+            The interaction to process slash commands for.
+        """
+        if interaction.type != InteractionType.application_command:
+            return
+
+        interaction.data = cast(ApplicationCommandInteractionData, interaction.data)
+        command_name, command_options = _unwrap_slash_groups(interaction.data)
+
+        command = self.get_command(command_name)
+        if command is None:
+            raise errors.CommandNotFound(f'Command "{command_name}" is not found')
+
+        channel = interaction.channel
+        if channel is None or isinstance(channel, PartialMessageable):
+            if interaction.guild is None:
+                assert interaction.user is not None
+                channel = await interaction.user.create_dm()
+            elif interaction.channel_id is not None:
+                channel = await interaction.guild.fetch_channel(interaction.channel_id)
+            else:
+                return
+
+        message: discord.Message = CustomSlashMessage.from_interaction(interaction, channel)  # type: ignore
+        prefix = await self.get_prefix(message)
+        if isinstance(prefix, list):
+            prefix = prefix[0]
+
+        ignore_params: List[inspect.Parameter] = []
+        message.content = f"{prefix}{command_name} "
+        for name, param in command.clean_params.items():
+            if inspect.isclass(param.annotation) and issubclass(param.annotation, FlagConverter):
+                for name, flag in param.annotation.get_flags().items():
+                    option = next((o for o in command_options if o["name"] == name), None)
+
+                    if option is None:
+                        if flag.required:
+                            raise errors.MissingRequiredFlag(flag)
+                    else:
+                        prefix = param.annotation.__commands_flag_prefix__
+                        delimiter = param.annotation.__commands_flag_delimiter__
+                        message.content += f"{prefix}{name} {option['value']}{delimiter}"  # type: ignore
+                continue
+
+            option = next((o for o in command_options if o["name"] == name), None)
+            if option is None:
+                if param.default is param.empty and not command._is_typing_optional(param.annotation):
+                    raise errors.MissingRequiredArgument(param)
+                else:
+                    ignore_params.append(param)
+            elif (option["type"] == 3 and not isinstance(param.annotation, Greedy) and param.kind in {param.POSITIONAL_OR_KEYWORD, param.POSITIONAL_ONLY}):
+                option = cast(_ApplicationCommandInteractionDataOptionString, option)
+                message.content += f"{_quote_string_safe(option['value'])} "
+            else:
+                message.content += f'{option.get("value", "")} '
+
+        ctx = await self.get_context(message)
+        ctx._ignored_params = ignore_params
+        ctx.interaction = interaction
+        await self.invoke(ctx)
+
     async def on_message(self, message):
         await self.process_commands(message)
+
+    async def on_interaction(self, interaction: Interaction):
+        await self.process_slash_interaction(interaction)
 
 class Bot(BotBase, Client):
     """Represents a discord bot.
@@ -1098,6 +1260,22 @@ class Bot(BotBase, Client):
         the ``command_prefix`` is set to ``!``. Defaults to ``False``.
 
         .. versionadded:: 1.7
+
+    message_commands: Optional[:class:`bool`]
+        Whether to process commands based on messages.
+        Can be overwritten per command in the command decorators or when making
+        a :class:`Command` object via the ``message_command`` parameter
+        .. versionadded:: 2.2
+    slash_interactions: Optional[:class:`bool`]
+        Whether to upload and process slash interactions.
+        Can be overwritten per command in the command decorators or when making
+        a :class:`Command` object via the ``slash_interaction`` parameter
+        .. versionadded:: 2.2
+    slash_interaction_guilds: Optional[:class:`List[int]`]
+        If this is set, only upload slash interactions to these guild IDs.
+        Can be overwritten per command in the command decorators or when making
+        a :class:`Command` object via the ``slash_interaction_guilds`` parameter
+        .. versionadded:: 2.2
     """
     pass
 
