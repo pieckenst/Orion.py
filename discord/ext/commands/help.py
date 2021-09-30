@@ -304,8 +304,16 @@ class HelpCommand:
     MENTION_PATTERN = re.compile('|'.join(MENTION_TRANSFORMS.keys()))
 
     def __new__(cls, *args, **kwargs):
+        # To prevent race conditions of a single instance while also allowing
+        # for settings to be passed the original arguments passed must be assigned
+        # to allow for easier copies (which will be made when the help command is actually called)
+        # see issue 2123
         self = super().__new__(cls)
 
+        # Shallow copies cannot be used in this case since it is not unusual to pass
+        # instances that need state, e.g. Paginator or what have you into the function
+        # The keys can be safely copied as-is since they're 99.99% certain of being
+        # string keys
         deepcopy = copy.deepcopy
         self.__original_kwargs__ = {k: deepcopy(v) for k, v in kwargs.items()}
         self.__original_args__ = deepcopy(args)
@@ -606,7 +614,7 @@ class HelpCommand:
         :class:`.abc.Messageable`
             The destination where the help command will be output.
         """
-        return self.context
+        return self.context.channel
 
     async def send_error_message(self, error):
         """|coro|
@@ -968,10 +976,6 @@ class DefaultHelpCommand(HelpCommand):
         for page in self.paginator.pages:
             await destination.send(page)
 
-        interaction = self.context.interaction
-        if interaction is not None and destination == self.context.author and not interaction.response.is_done():
-            await interaction.response.send_message("Sent help command output to your DMs!", ephemeral=True)
-
     def add_command_formatting(self, command):
         """A utility function to format the non-indented block of commands and groups.
 
@@ -1002,7 +1006,7 @@ class DefaultHelpCommand(HelpCommand):
         elif self.dm_help is None and len(self.paginator) > self.dm_help_threshold:
             return ctx.author
         else:
-            return ctx
+            return ctx.channel
 
     async def prepare_help_command(self, ctx, command):
         self.paginator.clear()

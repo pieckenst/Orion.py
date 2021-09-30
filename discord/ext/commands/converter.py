@@ -41,7 +41,6 @@ if TYPE_CHECKING:
 
 
 __all__ = (
-    "Option",
     'Converter',
     'ObjectConverter',
     'MemberConverter',
@@ -85,7 +84,7 @@ T = TypeVar('T')
 T_co = TypeVar('T_co', covariant=True)
 CT = TypeVar('CT', bound=discord.abc.GuildChannel)
 TT = TypeVar('TT', bound=discord.Thread)
-DT = TypeVar("DT", bound=str)
+
 
 @runtime_checkable
 class Converter(Protocol[T_co]):
@@ -994,19 +993,6 @@ class Greedy(List[T]):
 
         return cls(converter=converter)
 
-if TYPE_CHECKING:
-    def Option(default: T = inspect.Parameter.empty, *, description: str) -> T:
-        ...
-
-else:
-    class Option(Generic[T, DT]):
-        description: DT
-        default: Union[T, inspect.Parameter.empty]
-        __slots__ = ("default", "description")
-
-        def __init__(self, default: T = inspect.Parameter.empty, *, description: DT) -> None:
-            self.description = description
-            self.default = default
 
 def _convert_to_bool(argument: str) -> bool:
     lowered = argument.lower()

@@ -597,7 +597,7 @@ class Client:
     async def start(self, token: str, *, reconnect: bool = True) -> None:
         """|coro|
 
-        A shorthand coroutine for :meth:`login` + :meth: `setup` + :meth:`connect`.
+        A shorthand coroutine for :meth:`login` + :meth:`connect`.
 
         Raises
         -------
@@ -605,17 +605,7 @@ class Client:
             An unexpected keyword argument was received.
         """
         await self.login(token)
-        await self.setup()
         await self.connect(reconnect=reconnect)
-
-    async def setup(self) -> Any:
-        """|coro|
-        A coroutine to be called to setup the bot, this is blank by default.
-        To perform asynchronous setup after the bot is logged in but before
-        it needs connected to the Websocket, and overwrite this coroutine.
-        .. versionadded:: 2.2.3
-        """
-        pass
 
     def run(self, *args: Any, **kwargs: Any) -> None:
         """A blocking call that abstracts away the event loop

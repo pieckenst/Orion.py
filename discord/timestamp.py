@@ -9,7 +9,7 @@ __all__ = (
 
 T = TypeVar('T', bound='Timestamp')
 
-class Timestamp():
+class Timestamp:
     """Represents timestamp embedded messages(not embeds).
 
     Attributes
