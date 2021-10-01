@@ -138,4 +138,4 @@ Links
 Outsourced Credits
 ------------------
 
-`Gnome <https://github.com/Gnome-py>`_ - Slash interactions and ephemeral messages.
+`Gnome <https://github.com/Gnome-py>`_ from `enhanced discord.py <https://github.com/iDevision/enhanced-discord.py>`_
