@@ -4,14 +4,20 @@ Orion.py
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
    :target: https://discord.gg/zzdEGHbkTj
    :alt: Discord server invite
-.. image:: https://img.shields.io/pypi/v/discord.py.svg
-   :target: https://pypi.python.org/pypi/discord.py
+.. image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+   :target: https://www.python.org/
+   :alt: Made with Python
+.. image:: https://img.shields.io/pypi/v/orion.py.svg
+   :target: https://pypi.python.org/pypi/orion.py
    :alt: PyPI version info
-.. image:: https://img.shields.io/pypi/pyversions/discord.py.svg
-   :target: https://pypi.python.org/pypi/discord.py
+.. image:: https://img.shields.io/pypi/pyversions/orion.py.svg
+   :target: https://pypi.python.org/pypi/orion.py
    :alt: PyPI supported Python versions
 .. image:: https://img.shields.io/tokei/lines/github/Senarc-Studios/Orion.py?style=plastic
     :alt: Lines of code
+.. image:: https://badge-size.herokuapp.com/Senarc-Studios/Orion.py/master/
+   :alt: Size of package
+   :target: https://github.com/Naereen/StrapDown.js/blob/master
 .. image:: https://img.shields.io/github/issues/Senarc-Studios/Orion.py?style=plastic
     :alt: GitHub issues   
     :target: https://github.com/Senarc-Studios/Orion.py/issues
@@ -128,3 +134,8 @@ Links
 - `Documentation <https://discordpy.readthedocs.io/en/latest/index.html>`_
 - `Official Discord Server <https://discord.gg/zzdEGHbkTj>`_
 - `Discord API <https://discord.gg/discord-api>`_
+
+Outsourced Credits
+------------------
+
+`Gnome <https://github.com/Gnome-py>`_ from `enhanced discord.py <https://github.com/iDevision/enhanced-discord.py>`_
