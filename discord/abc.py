@@ -1428,6 +1428,7 @@ class Messageable:
         return ret
 
     def can_send(self, *objects) -> bool:
+        # Credits to the original code: https://github.com/iDevision/enhanced-discord.py/blob/2.0/discord/ext/commands/bot.py
         """Returns a :class:`bool` A function that checks if the message can be sent.
             Raises
             ------
