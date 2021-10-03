@@ -139,4 +139,5 @@ Outsourced Credits
 ------------------
 
 `Gnome <https://github.com/Gnome-py>`_ from `enhanced discord.py <https://github.com/iDevision/enhanced-discord.py>`_
+
 `Pycord <https://github.com/Pycord-Development/Pycord>`_
