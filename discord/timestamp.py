@@ -22,6 +22,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+import typing
 import datetime
 
 from datetime import datetime
@@ -33,7 +34,7 @@ __all__ = (
 
 T = TypeVar('T', bound='Timestamp')
 
-class Timestamp():
+class Timestamp:
     """Represents timestamp embedded messages(not embeds).
 
     Attributes
@@ -82,14 +83,22 @@ class Timestamp():
     async def convert_to_date(timestamp):
         """
         now: :class:`str`
-            The timestamp message of the current time.
+            The timestamp message of the current datetime.
         .. versionadded:: 2.2
         """
         try:
+            timestamp = str(timestamp)
+            timestamp = timestamp.replace("<t:", "")
+            timestamp = timestamp.replace(">", "")
+            try:
+                if len(timestamp) != 10:
+                    raise TypeError("ERROR: provided 'timestamp' is not a valid timestamp.")
+                timestamp = int(timestamp)
+            except:
+                raise TypeError(f"ERROR: provided 'timestamp' is not a valid timestamp.")
             dt_obj = datetime.fromtimestamp(timestamp)
             dt_obj = str(dt_obj).replace("-", "/")
             dt_obj = dt_obj.replace(" ", " - ")
             return dt_obj
         except Exception as e:
-            print(f"""An error has occured in 'conver_to_date' function, Error:\n{e}""")
-            return None
+            raise RuntimeError(f"ERROR: 'conver_to_date' function has failed to evaluate, Error:\n{e}")

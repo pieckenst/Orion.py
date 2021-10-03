@@ -317,7 +317,7 @@ class Embed:
         elif isinstance(value, int):
             self._colour = Colour(value=value)
         else:
-            raise TypeError(f'Expected discord.Colour, int, or Embed.Empty but received {value.__class__.__name__} instead.')
+            raise TypeError(f'ERROR: Expected discord.Colour, int, or Embed.Empty but received {value.__class__.__name__} instead.')
 
     color = colour
 
@@ -334,7 +334,7 @@ class Embed:
         elif isinstance(value, _EmptyEmbed):
             self._timestamp = value
         else:
-            raise TypeError(f"Expected datetime.datetime or Embed.Empty received {value.__class__.__name__} instead")
+            raise TypeError(f"ERROR: Expected datetime.datetime or Embed.Empty received {value.__class__.__name__} instead")
 
     @property
     def footer(self) -> _EmbedFooterProxy:
@@ -673,7 +673,7 @@ class Embed:
         try:
             field = self._fields[index]
         except (TypeError, IndexError, AttributeError):
-            raise IndexError('field index out of range')
+            raise IndexError('ERROR: field index out of range')
 
         field['name'] = str(name)
         field['value'] = str(value)

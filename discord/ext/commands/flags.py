@@ -128,7 +128,7 @@ def flag(
 
 def validate_flag_name(name: str, forbidden: Set[str]):
     if not name:
-        raise ValueError('flag names should not be empty')
+        raise ValueError('ERROR: flag names should not be empty')
 
     for ch in name:
         if ch.isspace():

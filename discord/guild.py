@@ -2909,16 +2909,16 @@ class Guild(Hashable):
 
         if query is None:
             if query == '':
-                raise ValueError('Cannot pass empty query string.')
+                raise ValueError('ERROR: Cannot pass empty query string.')
 
             if user_ids is None:
-                raise ValueError('Must pass either query or user_ids')
+                raise ValueError('ERROR: Must pass either query or user_ids')
 
         if user_ids is not None and query is not None:
-            raise ValueError('Cannot pass both query and user_ids')
+            raise ValueError('ERROR: Cannot pass both query and user_ids')
 
         if user_ids is not None and not user_ids:
-            raise ValueError('user_ids must contain at least 1 value')
+            raise ValueError('ERROR: user_ids must contain at least 1 value')
 
         limit = min(100, limit or 5)
         return await self._state.query_members(

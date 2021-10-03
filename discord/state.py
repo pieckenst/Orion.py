@@ -169,12 +169,12 @@ class ConnectionState:
         self.heartbeat_timeout: float = options.get('heartbeat_timeout', 60.0)
         self.guild_ready_timeout: float = options.get('guild_ready_timeout', 2.0)
         if self.guild_ready_timeout < 0:
-            raise ValueError('guild_ready_timeout cannot be negative')
+            raise ValueError('ERROR: guild_ready_timeout cannot be negative')
 
         allowed_mentions = options.get('allowed_mentions')
 
         if allowed_mentions is not None and not isinstance(allowed_mentions, AllowedMentions):
-            raise TypeError('allowed_mentions parameter must be AllowedMentions')
+            raise TypeError('ERROR: allowed_mentions parameter must be AllowedMentions')
 
         self.allowed_mentions: Optional[AllowedMentions] = allowed_mentions
         self._chunk_requests: Dict[Union[int, str], ChunkRequest] = {}
@@ -182,7 +182,7 @@ class ConnectionState:
         activity = options.get('activity', None)
         if activity:
             if not isinstance(activity, BaseActivity):
-                raise TypeError('activity parameter must derive from BaseActivity.')
+                raise TypeError('ERROR: activity parameter must derive from BaseActivity.')
 
             activity = activity.to_dict()
 
@@ -196,7 +196,7 @@ class ConnectionState:
         intents = options.get('intents', None)
         if intents is not None:
             if not isinstance(intents, Intents):
-                raise TypeError(f'intents parameter must be Intent not {type(intents)!r}')
+                raise TypeError(f'ERROR: intents parameter must be Intent not {type(intents)!r}')
         else:
             intents = Intents.default()
 
@@ -207,14 +207,14 @@ class ConnectionState:
 
         # Ensure these two are set properly
         if not intents.members and self._chunk_guilds:
-            raise ValueError('Intents.members must be enabled to chunk guilds at startup.')
+            raise ValueError('ERROR: Intents.members must be enabled to chunk guilds at startup.')
 
         cache_flags = options.get('member_cache_flags', None)
         if cache_flags is None:
             cache_flags = MemberCacheFlags.from_intents(intents)
         else:
             if not isinstance(cache_flags, MemberCacheFlags):
-                raise TypeError(f'member_cache_flags parameter must be MemberCacheFlags not {type(cache_flags)!r}')
+                raise TypeError(f'ERROR: member_cache_flags parameter must be MemberCacheFlags not {type(cache_flags)!r}')
 
             cache_flags._verify_intents(intents)
 
@@ -483,7 +483,7 @@ class ConnectionState:
         guild_id = guild.id
         ws = self._get_websocket(guild_id)
         if ws is None:
-            raise RuntimeError('Somehow do not have a websocket for this guild_id')
+            raise RuntimeError('ERROR: Somehow do not have a websocket for this guild_id')
 
         request = ChunkRequest(guild.id, self.loop, self._get_guild, cache=cache)
         self._chunk_requests[request.nonce] = request

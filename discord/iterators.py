@@ -96,7 +96,7 @@ class _AsyncIterator(AsyncIterator[T]):
 
     def chunk(self, max_size: int) -> _ChunkedAsyncIterator[T]:
         if max_size <= 0:
-            raise ValueError('async iterator chunk sizes must be greater than 0.')
+            raise ValueError('ERROR: async iterator chunk sizes must be greater than 0.')
         return _ChunkedAsyncIterator(self, max_size)
 
     def map(self, func: _Func[T, OT]) -> _MappedAsyncIterator[OT]:
@@ -284,9 +284,9 @@ class HistoryIterator(_AsyncIterator['Message']):
 
         if self.around:
             if self.limit is None:
-                raise ValueError('history does not support around with limit=None')
+                raise ValueError('ERROR: history does not support around with limit=None')
             if self.limit > 101:
-                raise ValueError("history max limit 101 when specifying around parameter")
+                raise ValueError("ERROR: history max limit 101 when specifying around parameter")
             elif self.limit == 101:
                 self.limit = 100  # Thanks discord
 
@@ -670,7 +670,7 @@ class ArchivedThreadIterator(_AsyncIterator['Thread']):
         self.http = guild._state.http
 
         if joined and not private:
-            raise ValueError('Cannot iterate over joined public archived threads')
+            raise ValueError('ERROR: Cannot iterate over joined public archived threads')
 
         self.before: Optional[str]
         if before is None:

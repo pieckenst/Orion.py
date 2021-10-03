@@ -698,7 +698,7 @@ class Client:
             # ConnectionState._activity is typehinted as ActivityPayload, we're passing Dict[str, Any]
             self._connection._activity = value.to_dict() # type: ignore
         else:
-            raise TypeError('activity must derive from BaseActivity.')
+            raise TypeError('ERROR: activity must derive from BaseActivity.')
     
     @property
     def status(self):
@@ -718,7 +718,7 @@ class Client:
         elif isinstance(value, Status):
             self._connection._status = str(value)
         else:
-            raise TypeError('status must derive from Status.')
+            raise TypeError('ERROR: status must derive from Status.')
 
     @property
     def allowed_mentions(self) -> Optional[AllowedMentions]:
@@ -733,7 +733,7 @@ class Client:
         if value is None or isinstance(value, AllowedMentions):
             self._connection.allowed_mentions = value
         else:
-            raise TypeError(f'allowed_mentions must be AllowedMentions not {value.__class__!r}')
+            raise TypeError(f'ERROR: allowed_mentions must be AllowedMentions not {value.__class__!r}')
 
     @property
     def intents(self) -> Intents:
@@ -1050,7 +1050,7 @@ class Client:
         """
 
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('event registered must be a coroutine function')
+            raise TypeError('ERROR: event registered must be a coroutine function')
 
         setattr(self, coro.__name__, coro)
         _log.debug('%s has successfully been registered as an event', coro.__name__)
@@ -1638,10 +1638,10 @@ class Client:
         """
 
         if not isinstance(view, View):
-            raise TypeError(f'expected an instance of View not {view.__class__!r}')
+            raise TypeError(f'ERROR: expected an instance of View not {view.__class__!r}')
 
         if not view.is_persistent():
-            raise ValueError('View is not persistent. Items need to have a custom_id set and View must have no timeout')
+            raise ValueError('ERROR: View is not persistent. Items need to have a custom_id set and View must have no timeout')
 
         self._connection.store_view(view, message_id)
 

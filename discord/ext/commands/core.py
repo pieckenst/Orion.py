@@ -139,7 +139,7 @@ def get_signature_parameters(function: Callable[..., Any], globalns: Dict[str, A
 
         annotation = eval_annotation(annotation, globalns, globalns, cache)
         if annotation is Greedy:
-            raise TypeError('Unparameterized Greedy[...] is disallowed in signature.')
+            raise TypeError('ERROR: Unparameterized Greedy[...] is disallowed in signature.')
 
         params[name] = parameter.replace(annotation=annotation)
 
@@ -285,9 +285,9 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
         Whether to upload and process this command as a slash interaction.
         This overwrites the global ``slash_interactions`` parameter of :class:`.Bot`.
         .. versionadded:: 2.2
-    slash_interaction_guilds: Optional[:class:`List[int]`]
+    guild_whitelist: Optional[:class:`List[int]`]
         If this is set, only upload this slash interaction to these guild IDs.
-        This overwrites the global ``slash_interaction_guilds`` parameter of :class:`.Bot`.
+        This overwrites the global ``guild_whitelist`` parameter of :class:`.Bot`.
     """
     __original_kwargs__: Dict[str, Any]
 
@@ -301,11 +301,11 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             Callable[Concatenate[ContextT, P], Coro[T]],
         ], **kwargs: Any):
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Callback must be a coroutine.')
+            raise TypeError('ERROR: Callback must be a coroutine.')
 
         name = kwargs.get('name') or func.__name__
         if not isinstance(name, str):
-            raise TypeError('Name of a command must be a string.')
+            raise TypeError('ERROR: Name of a command must be a string.')
         self.name: str = name
 
         self.callback = func
@@ -313,7 +313,7 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
 
         self.slash_interaction: Optional[bool] = kwargs.get("slash_interaction", None)
         self.message_command: Optional[bool] = kwargs.get("message_command", None)
-        self.slash_interaction_guilds: Optional[Iterable[int]] = kwargs.get("slash_interaction_guilds", None)
+        self.guild_whitelist: Optional[Iterable[int]] = kwargs.get("guild_whitelist", None)
 
         help_doc = kwargs.get('help')
         if help_doc is not None:
@@ -372,8 +372,8 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
 
         parent = kwargs.get('parent')
         self.parent: Optional[GroupMixin] = parent if isinstance(parent, _BaseCommand) else None  # type: ignore
-        if self.slash_interaction_guilds is not None and self.parent is not None:
-            raise ValueError("You cannot set guild specific subcommands.")
+        if self.guild_whitelist is not None and self.parent is not None:
+            raise ValueError("ERROR: You cannot set guild specific subcommands.")
 
         self._before_invoke: Optional[Hook] = None
         try:
@@ -631,13 +631,13 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             try:
                 del result[next(iter(result))]
             except StopIteration:
-                raise ValueError("missing 'self' parameter") from None
+                raise ValueError("ERROR: missing 'self' parameter") from None
 
         try:
             # first/second parameter is context
             del result[next(iter(result))]
         except StopIteration:
-            raise ValueError("missing 'context' parameter") from None
+            raise ValueError("ERROR: missing 'context' parameter") from None
 
         return result
 
@@ -937,7 +937,7 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
         """
 
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('The error handler must be a coroutine.')
+            raise TypeError('ERROR: The error handler must be a coroutine.')
 
         self.on_error: Error = coro
         return coro
@@ -971,7 +971,7 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             The coroutine passed is not actually a coroutine.
         """
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('The pre-invoke hook must be a coroutine.')
+            raise TypeError('ERROR: The pre-invoke hook must be a coroutine.')
 
         self._before_invoke = coro
         return coro
@@ -998,7 +998,7 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             The coroutine passed is not actually a coroutine.
         """
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('The post-invoke hook must be a coroutine.')
+            raise TypeError('ERROR: The post-invoke hook must be a coroutine.')
 
         self._after_invoke = coro
         return coro
@@ -1269,7 +1269,7 @@ class GroupMixin(Generic[CogT]):
         """
 
         if not isinstance(command, Command):
-            raise TypeError('The command passed must be a subclass of Command')
+            raise TypeError('ERROR: The command passed must be a subclass of Command')
 
         if isinstance(self, Command):
             command.parent = self
@@ -1678,7 +1678,7 @@ def command(
             Callable[Concatenate[CogT, ContextT, P], Coro[Any]],
         ]) -> CommandT:
         if isinstance(func, Command):
-            raise TypeError('Callback is already a command.')
+            raise TypeError('ERROR: Callback is already a command.')
         return cls(func, name=name, **attrs)
 
     return decorator
@@ -1878,7 +1878,7 @@ def check_any(*checks: Check) -> Callable[[T], T]:
         try:
             pred = wrapped.predicate
         except AttributeError:
-            raise TypeError(f'{wrapped!r} must be wrapped by commands.check decorator') from None
+            raise TypeError(f'ERROR: {wrapped!r} must be wrapped by commands.check decorator') from None
         else:
             unwrapped.append(pred)
 
@@ -2066,7 +2066,7 @@ def has_permissions(**perms: bool) -> Callable[[T], T]:
 
     invalid = set(perms) - set(discord.Permissions.VALID_FLAGS)
     if invalid:
-        raise TypeError(f"Invalid permission(s): {', '.join(invalid)}")
+        raise TypeError(f"ERROR: Invalid permission(s): {', '.join(invalid)}")
 
     def predicate(ctx: Context) -> bool:
         ch = ctx.channel
@@ -2091,7 +2091,7 @@ def bot_has_permissions(**perms: bool) -> Callable[[T], T]:
 
     invalid = set(perms) - set(discord.Permissions.VALID_FLAGS)
     if invalid:
-        raise TypeError(f"Invalid permission(s): {', '.join(invalid)}")
+        raise TypeError(f"ERROR: Invalid permission(s): {', '.join(invalid)}")
 
     def predicate(ctx: Context) -> bool:
         guild = ctx.guild
@@ -2119,7 +2119,7 @@ def has_guild_permissions(**perms: bool) -> Callable[[T], T]:
 
     invalid = set(perms) - set(discord.Permissions.VALID_FLAGS)
     if invalid:
-        raise TypeError(f"Invalid permission(s): {', '.join(invalid)}")
+        raise TypeError(f"ERROR: Invalid permission(s): {', '.join(invalid)}")
 
     def predicate(ctx: Context) -> bool:
         if not ctx.guild:
@@ -2144,7 +2144,7 @@ def bot_has_guild_permissions(**perms: bool) -> Callable[[T], T]:
 
     invalid = set(perms) - set(discord.Permissions.VALID_FLAGS)
     if invalid:
-        raise TypeError(f"Invalid permission(s): {', '.join(invalid)}")
+        raise TypeError(f"ERROR: Invalid permission(s): {', '.join(invalid)}")
 
     def predicate(ctx: Context) -> bool:
         if not ctx.guild:
@@ -2294,7 +2294,7 @@ def dynamic_cooldown(cooldown: Union[BucketType, Callable[[Message], Any]], type
         The type of cooldown to have.
     """
     if not callable(cooldown):
-        raise TypeError("A callable must be provided")
+        raise TypeError("ERROR: A callable must be provided")
 
     def decorator(func: Union[Command, CoroFunc]) -> Union[Command, CoroFunc]:
         if isinstance(func, Command):

@@ -305,7 +305,7 @@ class HTTPClient:
 
                 raise HTTPException(response, data)
 
-            raise RuntimeError('Unreachable code in HTTP handling')
+            raise RuntimeError('ERROR: Unreachable code in HTTP handling')
 
     async def get_from_cdn(self, url: str) -> bytes:
         async with self.__session.get(url) as resp:

@@ -1468,7 +1468,7 @@ class Messageable:
                     if obj.guild_id == channel.guild.id:
                         continue
             except (KeyError, AttributeError):
-                raise TypeError(f'The object type \'{obj}\' is of an invalid.')
+                raise TypeError(f'ERROR: The object type \'{obj}\' is of an invalid.')
             if not getattr(channel.permissions_for(channel.guild.me), permission):
                 return False
         return True 
@@ -1705,7 +1705,7 @@ class Connectable(Protocol):
         voice = cls(client, self)
 
         if not isinstance(voice, VoiceProtocol):
-            raise TypeError('Type must meet VoiceProtocol abstract base class.')
+            raise TypeError('ERROR: Type must meet VoiceProtocol abstract base class.')
 
         state._add_voice_client(key_id, voice)
 

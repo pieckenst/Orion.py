@@ -105,7 +105,7 @@ class BaseFlags:
         self.value = self.DEFAULT_VALUE
         for key, value in kwargs.items():
             if key not in self.VALID_FLAGS:
-                raise TypeError(f'{key!r} is not a valid flag name.')
+                raise TypeError(f'ERROR: {key!r} is not a valid flag name.')
             setattr(self, key, value)
 
     @classmethod
@@ -143,7 +143,7 @@ class BaseFlags:
         elif toggle is False:
             self.value &= ~o
         else:
-            raise TypeError(f'Value to set for {self.__class__.__name__} must be a bool.')
+            raise TypeError(f'ERROR: Value to set for {self.__class__.__name__} must be a bool.')
 
 
 @fill_with_flags(inverted=True)
@@ -197,7 +197,7 @@ class SystemChannelFlags(BaseFlags):
         elif toggle is False:
             self.value |= o
         else:
-            raise TypeError('Value to set for SystemChannelFlags must be a bool.')
+            raise TypeError('ERROR: Value to set for SystemChannelFlags must be a bool.')
 
     @flag_value
     def join_notifications(self):
@@ -462,7 +462,7 @@ class Intents(BaseFlags):
         self.value = self.DEFAULT_VALUE
         for key, value in kwargs.items():
             if key not in self.VALID_FLAGS:
-                raise TypeError(f'{key!r} is not a valid flag name.')
+                raise TypeError(f'ERROR: {key!r} is not a valid flag name.')
             setattr(self, key, value)
 
     @classmethod
@@ -918,7 +918,7 @@ class MemberCacheFlags(BaseFlags):
         self.value = (1 << bits) - 1
         for key, value in kwargs.items():
             if key not in self.VALID_FLAGS:
-                raise TypeError(f'{key!r} is not a valid flag name.')
+                raise TypeError(f'ERROR: {key!r} is not a valid flag name.')
             setattr(self, key, value)
 
     @classmethod
@@ -988,10 +988,10 @@ class MemberCacheFlags(BaseFlags):
 
     def _verify_intents(self, intents: Intents):
         if self.voice and not intents.voice_states:
-            raise ValueError('MemberCacheFlags.voice requires Intents.voice_states')
+            raise ValueError('ERROR: MemberCacheFlags.voice requires Intents.voice_states')
 
         if self.joined and not intents.members:
-            raise ValueError('MemberCacheFlags.joined requires Intents.members')
+            raise ValueError('ERROR: MemberCacheFlags.joined requires Intents.members')
 
     @property
     def _voice_only(self):
