@@ -31,7 +31,7 @@ Orion.py
     :alt: GitHub license   
     :target: https://github.com/Senarc-Studios/Orion.py/blob/master/LICENSE
 
-A modern, easy to use, feature-rich, and async ready API wrapper improved and revived from original discord.py, borrowing code from other libraries such as [Pycord](https://github.com/Pycord-Development/pycord) and [Enchanced Discord.py](https://github.com/iDevision/enhanced-discord.py)
+A modern, easy to use, feature-rich, and async ready API wrapper improved and revived from original discord.py, borrowing code from other libraries such as * `Pycord<https://github.com/Pycord-Development/pycord/>`__ and [Enchanced Discord.py](https://github.com/iDevision/enhanced-discord.py)
 
 Key Features
 -------------
