@@ -1249,3 +1249,18 @@ class MissingFlagArgument(FlagError):
     def __init__(self, flag: Flag) -> None:
         self.flag: Flag = flag
         super().__init__(f'Flag {flag.name!r} does not have an argument')
+
+class ApplicationCommandRegistrationError(ClientException):
+    """An exception raised when a command cannot be converted to an
+    application command.
+    This inherits from :exc:`discord.ClientException`
+    .. versionadded:: 2.0
+    Attributes
+    ----------
+    command: :class:`Command`
+        The command that failed to be converted.
+    """
+
+    def __init__(self, command: Command, msg: str = None) -> None:
+        self.command = command
+        super().__init__(msg or f"{command.qualified_name} failed while converting to an application command.")
