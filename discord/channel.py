@@ -252,7 +252,7 @@ class TextChannel(discord.abc.Messageable, discord.abc.GuildChannel, Hashable):
       
     @property
     def sendable(self):
-      """:class:`bool`: Checks bot permissions if the bot can send messages in that channel.
+        """:class:`bool`: Checks bot permissions if the bot can send messages in that channel.
         .. versionadded:: 2.2"""
         return self.permissions_for(self.guild.me).send_messages
       
