@@ -137,6 +137,52 @@ class DiscordException(Exception):
 
     pass
 
+class CommandError(DiscordException):
+    r"""The base exception type for all command related errors.
+    This inherits from :exc:`discord.DiscordException`.
+    This exception and exceptions inherited from it are handled
+    in a special way as they are caught and passed into a special event
+    from :class:`.Bot`\, :func:`.on_command_error`.
+    """
+    def __init__(self, message: Optional[str] = None, *args: Any) -> None:
+        if message is not None:
+            # clean-up @everyone and @here mentions
+            m = message.replace('@everyone', '@\u200beveryone').replace('@here', '@\u200bhere')
+            super().__init__(m, *args)
+        else:
+            super().__init__(*args)
+
+class CommandNotFound(CommandError):
+    """Exception raised when a command is attempted to be invoked
+    but no command under that name is found.
+    This is not raised for invalid subcommands, rather just the
+    initial main command that is attempted to be invoked.
+    This inherits from :exc:`CommandError`.
+    """
+    pass
+
+class ExtensionError(DiscordException):
+    """Base exception for extension related errors.
+    This inherits from :exc:`~discord.DiscordException`.
+    Attributes
+    ------------
+    name: :class:`str`
+        The extension that had an error.
+    """
+    def __init__(self, message: Optional[str] = None, *args: Any, name: str) -> None:
+        self.name: str = name
+        message = message or f'Extension {name!r} had an error.'
+        # clean-up @everyone and @here mentions
+        m = message.replace('@everyone', '@\u200beveryone').replace('@here', '@\u200bhere')
+        super().__init__(m, *args)
+
+class NoEntryPointError(ExtensionError):
+    """An exception raised when an extension does not have a ``setup`` entry point function.
+    This inherits from :exc:`ExtensionError`
+    """
+    def __init__(self, name: str) -> None:
+        super().__init__(f"Extension {name!r} has no 'setup' function.", name=name)
+
 class ClientException(DiscordException):
     """Exception that's raised when an operation in the :class:`Client` fails.
 
@@ -1051,23 +1097,6 @@ class ExpectedClosingQuoteError(ArgumentParsingError):
         self.close_quote: str = close_quote
         super().__init__(f'Expected closing {close_quote}.')
 
-class ExtensionError(DiscordException):
-    """Base exception for extension related errors.
-
-    This inherits from :exc:`~discord.DiscordException`.
-
-    Attributes
-    ------------
-    name: :class:`str`
-        The extension that had an error.
-    """
-    def __init__(self, message: Optional[str] = None, *args: Any, name: str) -> None:
-        self.name: str = name
-        message = message or f'Extension {name!r} had an error.'
-        # clean-up @everyone and @here mentions
-        m = message.replace('@everyone', '@\u200beveryone').replace('@here', '@\u200bhere')
-        super().__init__(m, *args)
-
 class ExtensionAlreadyLoaded(ExtensionError):
     """An exception raised when an extension has already been loaded.
 
@@ -1083,14 +1112,6 @@ class ExtensionNotLoaded(ExtensionError):
     """
     def __init__(self, name: str) -> None:
         super().__init__(f'Extension {name!r} has not been loaded.', name=name)
-
-class NoEntryPointError(ExtensionError):
-    """An exception raised when an extension does not have a ``setup`` entry point function.
-
-    This inherits from :exc:`ExtensionError`
-    """
-    def __init__(self, name: str) -> None:
-        super().__init__(f"Extension {name!r} has no 'setup' function.", name=name)
 
 class ExtensionFailed(ExtensionError):
     """An exception raised when an extension failed to load during execution of the module or ``setup`` entry point.
