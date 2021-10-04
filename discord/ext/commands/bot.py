@@ -176,7 +176,7 @@ class BotBase(GroupMixin):
         self.owner_id = options.get('owner_id')
         self.owner_ids = options.get('owner_ids', set())
         self.strip_after_prefix = options.get('strip_after_prefix', False)
-        self.slash_interaction_guilds: Optional[Iterable[int]] = options.get("slash_interaction_guilds", None)
+        self.guild_whitelist: Optional[Iterable[int]] = options.get("guild_whitelist", None)
 
         if not (message_commands or slash_interactions):
             raise ValueError("ERROR: Both message_commands and slash_interactions are disabled.")
@@ -218,7 +218,7 @@ class BotBase(GroupMixin):
             if payload is None:
                 continue
 
-            guilds = command.slash_interaction_guilds or self.slash_interaction_guilds
+            guilds = command.guild_whitelist or self.guild_whitelist
             if guilds is None:
                 commands[None].append(payload)
             else:
@@ -229,10 +229,10 @@ class BotBase(GroupMixin):
         global_commands = commands.pop(None, None)
         application_id = self.application_id or (await self.application_info()).id  # type: ignore
         if global_commands is not None:
-            if self.slash_interaction_guilds is None:
+            if self.guild_whitelist is None:
                 await http.bulk_upsert_global_commands(payload=global_commands, application_id=application_id)
             else:
-                for guild in self.slash_interaction_guilds:
+                for guild in self.guild_whitelist:
                     await http.bulk_upsert_guild_commands(guild_id=guild, payload=global_commands, application_id=application_id)
 
         for guild, guild_commands in commands.items():
@@ -1271,10 +1271,10 @@ class Bot(BotBase, Client):
         Can be overwritten per command in the command decorators or when making
         a :class:`Command` object via the ``slash_interaction`` parameter
         .. versionadded:: 2.2
-    slash_interaction_guilds: Optional[:class:`List[int]`]
+    guild_whitelist: Optional[:class:`List[int]`]
         If this is set, only upload slash interactions to these guild IDs.
         Can be overwritten per command in the command decorators or when making
-        a :class:`Command` object via the ``slash_interaction_guilds`` parameter
+        a :class:`Command` object via the ``guild_whitelist`` parameter
         .. versionadded:: 2.2
     """
     pass
