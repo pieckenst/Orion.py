@@ -1125,6 +1125,10 @@ Utility Functions
 
 .. autofunction:: discord.utils.as_chunks
 
+.. autofunction:: discord.utils.time_snowflake
+
+.. autofunction:: discord.utils.generate_snowflake
+
 .. _discord-api-enums:
 
 Enumerations
