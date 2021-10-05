@@ -162,7 +162,7 @@ class classproperty(Generic[T_co]):
         return self.fget(owner)
 
     def __set__(self, instance, value) -> None:
-        raise AttributeError('cannot set attribute')
+        raise AttributeError('ERROR: cannot set attribute')
 
 
 def cached_slot_property(name: str) -> Callable[[Callable[[T], T_co]], CachedSlotProperty[T, T_co]]:
@@ -855,7 +855,7 @@ def as_chunks(iterator: _Iter[T], max_size: int) -> _Iter[List[T]]:
         A new iterator which yields chunks of a given size.
     """
     if max_size <= 0:
-        raise ValueError('Chunk sizes must be greater than 0.')
+        raise ValueError('ERROR: Chunk sizes must be greater than 0.')
 
     if isinstance(iterator, AsyncIterator):
         return _achunk(iterator, max_size)
@@ -926,7 +926,7 @@ def evaluate_annotation(
         evaluated_args = tuple(evaluate_annotation(arg, globals, locals, cache, implicit_str=implicit_str) for arg in args)
 
         if is_literal and not all(isinstance(x, (str, int, bool, type(None))) for x in evaluated_args):
-            raise TypeError('Literal arguments must be of type str, int, bool, or NoneType.')
+            raise TypeError('ERROR: Literal arguments must be of type str, int, bool, or NoneType.')
 
         if evaluated_args == args:
             return tp
@@ -1004,28 +1004,21 @@ def format_dt(dt: datetime.datetime, /, style: Optional[TimestampStyle] = None) 
     return f'<t:{int(dt.timestamp())}:{style}>'
     
 
-def generate_snowflake(dt: datetime.datetime) -> int:
-    """Returns a numeric snowflake pretending to be created at the given date.
+def generate_snowflake(dt: Optional[datetime.datetime] = None) -> int:
+    """Returns a numeric snowflake pretending to be created at the given date but more accurate and random than time_snowflake.
+    If no time is not passed, it makes one from the current time using utcnow.
+
+    Parameters
     -----------
     dt: :class:`datetime.datetime`
         A datetime object to convert to a snowflake.
         If naive, the timezone is assumed to be local time.
+
     Returns
     --------
     :class:`int`
         The snowflake representing the time given.
     """
 
+    dt = dt or utcnow()
     return int(dt.timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
-
-
-def quick_snowflake() -> int:
-    """Returns a numeric snowflake pretending to be created at the given date.
-    -----------
-    Returns
-    --------
-    :class:`int`
-        The snowflake representing a snowflake generated on the spot.
-    """
-
-    return int(utcnow().timestamp() * 1000 - DISCORD_EPOCH) << 22 | 0x3fffff
