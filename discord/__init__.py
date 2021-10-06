@@ -60,7 +60,6 @@ from .user import *
 from .voice_client import *
 from .webhook import *
 from .widget import *
-#from .timestamp import *
 from .timestamp import Timestamp
 
 class VersionInfo(NamedTuple):
