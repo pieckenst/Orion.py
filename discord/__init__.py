@@ -21,6 +21,7 @@ import logging
 from typing import Literal, NamedTuple
 
 from . import abc, opus, ui, utils
+from .timestamp import Timestamp
 from .activity import *
 from .appinfo import *
 from .asset import *

@@ -55,7 +55,6 @@ class Timestamp:
         .. versionadded:: 2.2
     """
 
-    
     def convert_to_timestamp(date: str):
         """
         convert_to_timestamp: :class:`str`
@@ -63,9 +62,8 @@ class Timestamp:
         .. versionadded:: 2.2
         """
         date = datetime.strptime(date, "%d/%m/%Y - %H:%M:%S")
-        return f"<t:{int(date.timestamp())}>"
+        return ("<t:" + f"{date.timestamp()}".replace(".0", "") + ">")
 
-   
     def now():
         """
         convert_to_datetime: :class:`str`
@@ -73,10 +71,9 @@ class Timestamp:
         .. versionadded:: 2.2
         """
         date = (datetime.now()).timestamp()
-        return f"<t:{int(date)}>"
+        return ("<t:" + f"{int(date)}>")
 
-    
-    def convert_to_date(timestamp: str):
+    def convert_to_date(timestamp):
         """
         now: :class:`str`
             The timestamp message of the current datetime.
