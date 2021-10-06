@@ -56,7 +56,7 @@ class Timestamp:
     """
 
     
-    def convert_to_timestamp(date: datetime):
+    def convert_to_timestamp(date: str):
         """
         convert_to_timestamp: :class:`str`
             Converts datetime into timestamp message.
