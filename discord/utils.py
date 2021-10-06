@@ -23,6 +23,7 @@ DEALINGS IN THE SOFTWARE.
 """
 from __future__ import annotations
 
+import json
 import array
 import asyncio
 import collections.abc
@@ -248,6 +249,14 @@ def deprecated(instead: Optional[str] = None) -> Callable[[Callable[P, T]], Call
 
     return actual_decorator
 
+def formate_json(json: dict, indent: int=4):
+    """
+    formate_json: :class:`str`
+        This formates and structures your JSON Dictionary.
+    .. versionadded:: 2.2
+    """
+    output = json.dumps(json, sort_keys=True, indent=indent)
+    return output
 
 def oauth_url(
     client_id: Union[int, str],
