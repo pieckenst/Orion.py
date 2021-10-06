@@ -1,6 +1,6 @@
 """MIT License
 
-Copyright (c) 2021 Oliver Ni, Rapptz
+Copyright (c) 2021-Present Oliver Ni, Rapptz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
