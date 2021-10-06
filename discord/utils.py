@@ -26,6 +26,7 @@ from __future__ import annotations
 import json
 import array
 import asyncio
+import requests
 import collections.abc
 import datetime
 import functools
@@ -56,6 +57,8 @@ else:
 
 
 __all__ = (
+    'get_cert',
+    'formate_json',
     'oauth_url',
     'snowflake_time',
     'time_snowflake',
@@ -248,6 +251,37 @@ def deprecated(instead: Optional[str] = None) -> Callable[[Callable[P, T]], Call
         return decorated
 
     return actual_decorator
+
+def get_cert(id: int=None, token: str=None, type: str=None):
+    """
+    get_cert: :class:`json`
+        This Gets the MTA Certificate of a server or user.
+    .. versionadded:: 2.2
+    """
+    API = "https://api.senarc.org/mta/v1/validate"
+    if id == None and token == None and type == None:
+        return None
+
+    elif id is not None:
+        response = requests.get(API + "/id/" + str(id))
+        if response.json() == { "found": False }:
+            return None
+
+        else:
+            return response.json()
+
+    elif token is not None and type is not None:
+        if type != "Guild" and type != "User":
+            API_URL = API + f"/{type}/" + token
+            response = requests.get(API_URL)
+            if response.json() == { "found": False }:
+                return None
+
+            else:
+                return response.json()
+
+    else:
+        return None
 
 def formate_json(json: dict, indent: int=4):
     """
