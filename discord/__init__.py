@@ -61,6 +61,8 @@ from .webhook import *
 from .widget import *
 #from .timestamp import *
 #for whatever reason it's a star import issue
+#you can do from .timestamp import TimeStamp
+#but it doesn't allow *
 
 class VersionInfo(NamedTuple):
     major: int
