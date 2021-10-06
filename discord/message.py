@@ -752,7 +752,7 @@ class Message(Hashable):
 
         if reaction is None:
             # already removed?
-            raise ValueError('Emoji already removed?')
+            raise ValueError('ERROR: Emoji already removed?')
 
         # if reaction isn't in the list, we crash. This means discord
         # sent bad data, or we stored improperly
@@ -1667,7 +1667,7 @@ class PartialMessage(Hashable):
             ChannelType.public_thread,
             ChannelType.private_thread,
         ):
-            raise TypeError(f'Expected TextChannel, DMChannel or Thread not {type(channel)!r}')
+            raise TypeError(f'ERROR: Expected TextChannel, DMChannel or Thread not {type(channel)!r}')
 
         self.channel: PartialMessageableChannel = channel
         self._state: ConnectionState = channel._state

@@ -176,13 +176,13 @@ class BotBase(GroupMixin):
         self.owner_id = options.get('owner_id')
         self.owner_ids = options.get('owner_ids', set())
         self.strip_after_prefix = options.get('strip_after_prefix', False)
-        self.slash_interaction_guilds: Optional[Iterable[int]] = options.get("slash_interaction_guilds", None)
+        self.guild_whitelist: Optional[Iterable[int]] = options.get("guild_whitelist", None)
 
         if not (message_commands or slash_interactions):
-            raise ValueError("Both message_commands and slash_interactions are disabled.")
+            raise ValueError("ERROR: Both message_commands and slash_interactions are disabled.")
 
         if self.owner_id and self.owner_ids:
-            raise TypeError('Both owner_id and owner_ids are set.')
+            raise TypeError('ERROR: Both owner_id and owner_ids are set.')
 
         if self.owner_ids and not isinstance(self.owner_ids, collections.abc.Collection):
             raise TypeError(f'owner_ids must be a collection not {self.owner_ids.__class__!r}')
@@ -219,7 +219,7 @@ class BotBase(GroupMixin):
             if payload is None:
                 continue
 
-            guilds = command.slash_interaction_guilds or self.slash_interaction_guilds
+            guilds = command.guild_whitelist or self.guild_whitelist
             if guilds is None:
                 commands[None].append(payload)
             else:
@@ -230,10 +230,10 @@ class BotBase(GroupMixin):
         global_commands = commands.pop(None, None)
         application_id = self.application_id or (await self.application_info()).id  # type: ignore
         if global_commands is not None:
-            if self.slash_interaction_guilds is None:
+            if self.guild_whitelist is None:
                 await http.bulk_upsert_global_commands(payload=global_commands, application_id=application_id)
             else:
-                for guild in self.slash_interaction_guilds:
+                for guild in self.guild_whitelist:
                     await http.bulk_upsert_guild_commands(guild_id=guild, payload=global_commands, application_id=application_id)
 
         for guild, guild_commands in commands.items():
@@ -464,7 +464,7 @@ class BotBase(GroupMixin):
             The coroutine passed is not actually a coroutine.
         """
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('The pre-invoke hook must be a coroutine.')
+            raise TypeError('ERROR: The pre-invoke hook must be a coroutine.')
 
         self._before_invoke = coro
         return coro
@@ -497,7 +497,7 @@ class BotBase(GroupMixin):
             The coroutine passed is not actually a coroutine.
         """
         if not asyncio.iscoroutinefunction(coro):
-            raise TypeError('The post-invoke hook must be a coroutine.')
+            raise TypeError('ERROR: The post-invoke hook must be a coroutine.')
 
         self._after_invoke = coro
         return coro
@@ -529,7 +529,7 @@ class BotBase(GroupMixin):
         name = func.__name__ if name is MISSING else name
 
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Listeners must be coroutines')
+            raise TypeError('ERROR: Listeners must be coroutines')
 
         if name in self.extra_events:
             self.extra_events[name].append(func)
@@ -625,7 +625,7 @@ class BotBase(GroupMixin):
         """
 
         if not isinstance(cog, Cog):
-            raise TypeError('cogs must derive from Cog')
+            raise TypeError('ERROR: cogs must derive from Cog')
 
         cog_name = cog.__cog_name__
         existing = self.__cogs.get(cog_name)
@@ -934,7 +934,7 @@ class BotBase(GroupMixin):
     def help_command(self, value: Optional[HelpCommand]) -> None:
         if value is not None:
             if not isinstance(value, HelpCommand):
-                raise TypeError('help_command must be a subclass of HelpCommand')
+                raise TypeError('ERROR: help_command must be a subclass of HelpCommand')
             if self._help_command is not None:
                 self._help_command._remove_from_bot(self)
             self._help_command = value
@@ -977,11 +977,11 @@ class BotBase(GroupMixin):
                 if isinstance(ret, collections.abc.Iterable):
                     raise
 
-                raise TypeError("command_prefix must be plain string, iterable of strings, or callable "
+                raise TypeError("ERROR: command_prefix must be plain string, iterable of strings, or callable "
                                 f"returning either of these, not {ret.__class__.__name__}")
 
             if not ret:
-                raise ValueError("Iterable command_prefix must contain at least one prefix")
+                raise ValueError("ERROR: Iterable command_prefix must contain at least one prefix")
 
         return ret
 
@@ -1038,13 +1038,13 @@ class BotBase(GroupMixin):
 
             except TypeError:
                 if not isinstance(prefix, list):
-                    raise TypeError("get_prefix must return either a string or a list of string, "
+                    raise TypeError("ERROR: get_prefix must return either a string or a list of string, "
                                     f"not {prefix.__class__.__name__}")
 
                 # It's possible a bad command_prefix got us here.
                 for value in prefix:
                     if not isinstance(value, str):
-                        raise TypeError("Iterable command_prefix or list returned from get_prefix must "
+                        raise TypeError("ERROR: Iterable command_prefix or list returned from get_prefix must "
                                         f"contain only strings, not {value.__class__.__name__}")
 
                 # Getting here shouldn't happen
@@ -1272,10 +1272,10 @@ class Bot(BotBase, Client):
         Can be overwritten per command in the command decorators or when making
         a :class:`Command` object via the ``slash_interaction`` parameter
         .. versionadded:: 2.2
-    slash_interaction_guilds: Optional[:class:`List[int]`]
+    guild_whitelist: Optional[:class:`List[int]`]
         If this is set, only upload slash interactions to these guild IDs.
         Can be overwritten per command in the command decorators or when making
-        a :class:`Command` object via the ``slash_interaction_guilds`` parameter
+        a :class:`Command` object via the ``guild_whitelist`` parameter
         .. versionadded:: 2.2
     """
     pass

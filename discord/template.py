@@ -47,7 +47,7 @@ class _FriendlyHttpAttributeErrorHelper:
     __slots__ = ()
 
     def __getattr__(self, attr):
-        raise AttributeError('PartialTemplateState does not support http methods.')
+        raise AttributeError('ERROR: PartialTemplateState does not support http methods.')
 
 
 class _PartialTemplateState:

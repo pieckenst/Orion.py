@@ -122,7 +122,7 @@ class Converter(Protocol[T_co]):
         :exc:`.BadArgument`
             The converter failed to convert the argument.
         """
-        raise NotImplementedError('Derived classes need to implement this.')
+        raise NotImplementedError('ERROR: Derived classes need to implement this.')
 
 
 _ID_REGEX = re.compile(r'([0-9]{15,20})$')
@@ -977,20 +977,20 @@ class Greedy(List[T]):
         if not isinstance(params, tuple):
             params = (params,)
         if len(params) != 1:
-            raise TypeError('Greedy[...] only takes a single argument')
+            raise TypeError('ERROR: Greedy[...] only takes a single argument')
         converter = params[0]
 
         origin = getattr(converter, '__origin__', None)
         args = getattr(converter, '__args__', ())
 
         if not (callable(converter) or isinstance(converter, Converter) or origin is not None):
-            raise TypeError('Greedy[...] expects a type or a Converter instance.')
+            raise TypeError('ERROR: Greedy[...] expects a type or a Converter instance.')
 
         if converter in (str, type(None)) or origin is Greedy:
-            raise TypeError(f'Greedy[{converter.__name__}] is invalid.')
+            raise TypeError(f'ERROR: Greedy[{converter.__name__}] is invalid.')
 
         if origin is Union and type(None) in args:
-            raise TypeError(f'Greedy[{converter!r}] is invalid.')
+            raise TypeError(f'ERROR: Greedy[{converter!r}] is invalid.')
 
         return cls(converter=converter)
 

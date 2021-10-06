@@ -460,6 +460,7 @@ class InteractionResponse:
         view: View = MISSING,
         tts: bool = False,
         ephemeral: bool = False,
+        delete_after: float = None
     ) -> None:
         """|coro|
 
@@ -480,9 +481,12 @@ class InteractionResponse:
         view: :class:`discord.ui.View`
             The view to send with the message.
         ephemeral: :class:`bool`
-            Indicates if the message should only be visible to the user who started the interaction.
+            Indicates if the message should only be visible to the user used the interaction command.
             If a view is sent with an ephemeral message and it has no timeout set then the timeout
             is set to 15 minutes.
+        delete_after: :class:`float`
+            If specified, it will delete the interaction message after the specified
+            amount of second.
 
         Raises
         -------
@@ -503,14 +507,14 @@ class InteractionResponse:
         }
 
         if embed is not MISSING and embeds is not MISSING:
-            raise TypeError('cannot mix embed and embeds keyword arguments')
+            raise TypeError('ERROR: cannot mix embed and embeds keyword arguments')
 
         if embed is not MISSING:
             embeds = [embed]
 
         if embeds:
             if len(embeds) > 10:
-                raise ValueError('embeds cannot exceed maximum of 10 elements')
+                raise ValueError('ERROR: embeds cannot exceed maximum of 10 elements')
             payload['embeds'] = [e.to_dict() for e in embeds]
 
         if content is not None:
@@ -539,6 +543,12 @@ class InteractionResponse:
             self._parent._state.store_view(view)
 
         self.responded_at = utils.utcnow()
+
+        if delete_after is not None:
+            async def delete():
+                await asyncio.sleep(delete_after)
+                await self._parent.delete_original_message()
+            asyncio.ensure_future(delete(), loop=self._parent._state.loop)
 
     async def edit_message(
         self,

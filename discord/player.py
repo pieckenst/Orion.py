@@ -491,7 +491,7 @@ class FFmpegOpusAudio(FFmpegAudio):
         if isinstance(method, str):
             probefunc = getattr(cls, '_probe_codec_' + method, None)
             if probefunc is None:
-                raise AttributeError(f"Invalid probe method {method!r}")
+                raise AttributeError(f"ERROR: Invalid probe method {method!r}")
 
             if probefunc is cls._probe_codec_native:
                 fallback = cls._probe_codec_fallback
@@ -589,7 +589,7 @@ class PCMVolumeTransformer(AudioSource, Generic[AT]):
 
     def __init__(self, original: AT, volume: float = 1.0):
         if not isinstance(original, AudioSource):
-            raise TypeError(f'expected AudioSource not {original.__class__.__name__}.')
+            raise TypeError(f'ERROR: expected AudioSource not {original.__class__.__name__}.')
 
         if original.is_opus():
             raise ClientException('AudioSource must not be Opus encoded.')
@@ -631,7 +631,7 @@ class AudioPlayer(threading.Thread):
         self._lock: threading.Lock = threading.Lock()
 
         if after is not None and not callable(after):
-            raise TypeError('Expected a callable for the "after" parameter.')
+            raise TypeError(f'ERROR: ERROR: Expected a callable for the "after" parameter.')
 
     def _do_run(self) -> None:
         self.loops = 0

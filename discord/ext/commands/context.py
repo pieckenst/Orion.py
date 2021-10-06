@@ -231,7 +231,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
         cmd = self.command
         view = self.view
         if cmd is None:
-            raise ValueError('This context is not valid.')
+            raise ValueError('ERROR: This context is not valid.')
 
         # some state to revert to when we're done
         index, previous = view.index, view.previous
@@ -414,7 +414,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
     async def send(self, content: Optional[str] = None, return_message: Literal[True] = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         ...
 
-    async def send(self, content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+    async def send(self, content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, view = Optional[str], **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         """
         |coro|
         A shortcut method to :meth:`.abc.Messageable.send` with interaction helpers.
@@ -460,7 +460,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
 
             send = self.interaction.followup.send
 
-        return await send(content, ephemeral=ephemeral, **kwargs)  # type: ignore
+        return await send(content, ephemeral=ephemeral, view=view, **kwargs)  # type: ignore
 
     @overload
     async def reply(self, content: Optional[str] = None, return_message: Literal[False] = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:

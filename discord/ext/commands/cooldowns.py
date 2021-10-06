@@ -200,7 +200,7 @@ class CooldownMapping:
         type: Callable[[Message], Any],
     ) -> None:
         if not callable(type):
-            raise TypeError('Cooldown type must be a BucketType or callable')
+            raise TypeError('ERROR: Cooldown type must be a BucketType or callable')
 
         self._cache: Dict[Any, Cooldown] = {}
         self._cooldown: Optional[Cooldown] = original
@@ -348,10 +348,10 @@ class MaxConcurrency:
         self.wait: bool = wait
 
         if number <= 0:
-            raise ValueError('max_concurrency \'number\' cannot be less than 1')
+            raise ValueError('ERROR: max_concurrency \'number\' cannot be less than 1')
 
         if not isinstance(per, BucketType):
-            raise TypeError(f'max_concurrency \'per\' must be of type BucketType not {type(per)!r}')
+            raise TypeError(f'ERROR: max_concurrency \'per\' must be of type BucketType not {type(per)!r}')
 
     def copy(self: MC) -> MC:
         return self.__class__(self.number, per=self.per, wait=self.wait)

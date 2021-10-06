@@ -249,7 +249,14 @@ class TextChannel(discord.abc.Messageable, discord.abc.GuildChannel, Hashable):
             The last message in this channel or ``None`` if not found.
         """
         return self._state._get_message(self.last_message_id) if self.last_message_id else None
-
+      
+    @property
+    def sendable(self):
+        """:class:`bool`: Checks bot permissions if the bot can send messages in that channel.
+        .. versionadded:: 2.2"""
+        return self.permissions_for(self.guild.me).send_messages
+      
+    
     @overload
     async def edit(
         self,

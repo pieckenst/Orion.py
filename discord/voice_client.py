@@ -226,7 +226,7 @@ class VoiceClient(VoiceProtocol):
 
     def __init__(self, client: Client, channel: abc.Connectable):
         if not has_nacl:
-            raise RuntimeError("PyNaCl library needed in order to use voice")
+            raise RuntimeError("ERROR: PyNaCl library needed in order to use voice")
 
         super().__init__(client, channel)
         state = client._connection

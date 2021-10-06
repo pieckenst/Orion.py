@@ -32,6 +32,9 @@ from .errors import InvalidArgument
 from .mixins import Hashable
 from .permissions import Permissions
 from .utils import MISSING, _get_as_snowflake, snowflake_time
+from .asset import Asset
+
+from . import utils
 
 __all__ = (
     'RoleTags',
@@ -174,6 +177,7 @@ class Role(Hashable):
     """
 
     __slots__ = (
+        '_icon',
         'id',
         'name',
         '_permissions',
@@ -204,7 +208,7 @@ class Role(Hashable):
             return NotImplemented
 
         if self.guild != other.guild:
-            raise RuntimeError('cannot compare roles from two different guilds.')
+            raise RuntimeError('ERROR: cannot compare roles from two different guilds.')
 
         # the @everyone role is always the lowest role in hierarchy
         guild_id = self.guild.id
@@ -236,6 +240,7 @@ class Role(Hashable):
         return not r
 
     def _update(self, data: RolePayload):
+        self._icon: Optional[Asset] = data.get('icon')
         self.name: str = data['name']
         self._permissions: int = int(data.get('permissions', 0))
         self.position: int = data.get('position', 0)
@@ -282,6 +287,22 @@ class Role(Hashable):
         """
         me = self.guild.me
         return not self.is_default() and not self.managed and (me.top_role > self or me.id == self.guild.owner_id)
+
+    @property
+    def icon(self) -> Optional[Asset]:
+        """Optional[:class:`Asset`]: Icon returns the icon of the role. If role has no icon, then it returns ``None``.
+        
+        .. versionadded:: 2.2
+        """
+        if self._icon is None:
+            return None
+
+        return Asset._from_icon(
+                self._state,
+                self.id,
+                self._icon,
+                'role',
+            )
 
     @property
     def permissions(self) -> Permissions:
@@ -344,6 +365,7 @@ class Role(Hashable):
     async def edit(
         self,
         *,
+        icon: Optional[bytes] = MISSING,
         name: str = MISSING,
         permissions: Permissions = MISSING,
         colour: Union[Colour, int] = MISSING,
@@ -374,6 +396,8 @@ class Role(Hashable):
             The new role name to change to.
         permissions: :class:`Permissions`
             The new permissions to change to.
+        icon: Optional[:class:`bytes`]
+            The new icon to change to.
         colour: Union[:class:`Colour`, :class:`int`]
             The new colour to change to. (aliased to color as well)
         hoist: :class:`bool`
@@ -413,6 +437,12 @@ class Role(Hashable):
                 payload['color'] = colour
             else:
                 payload['color'] = colour.value
+
+        if icon is not MISSING:
+            if icon is None:
+                payload['icon'] = icon
+            else:
+                payload['icon'] = utils._bytes_to_base64_data(icon)
 
         if name is not MISSING:
             payload['name'] = name

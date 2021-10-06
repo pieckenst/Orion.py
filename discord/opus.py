@@ -336,14 +336,14 @@ class Encoder(_OpusStruct):
 
     def set_bandwidth(self, req: BAND_CTL) -> None:
         if req not in band_ctl:
-            raise KeyError(f'{req!r} is not a valid bandwidth setting. Try one of: {",".join(band_ctl)}')
+            raise KeyError(f'ERROR: {req!r} is not a valid bandwidth setting. Try one of: {",".join(band_ctl)}')
 
         k = band_ctl[req]
         _lib.opus_encoder_ctl(self._state, CTL_SET_BANDWIDTH, k)
 
     def set_signal_type(self, req: SIGNAL_CTL) -> None:
         if req not in signal_ctl:
-            raise KeyError(f'{req!r} is not a valid bandwidth setting. Try one of: {",".join(signal_ctl)}')
+            raise KeyError(f'ERROR: {req!r} is not a valid bandwidth setting. Try one of: {",".join(signal_ctl)}')
 
         k = signal_ctl[req]
         _lib.opus_encoder_ctl(self._state, CTL_SET_SIGNAL, k)
