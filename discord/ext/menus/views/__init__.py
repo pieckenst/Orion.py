@@ -26,6 +26,7 @@ from there
 import discord
 from discord.ext import menus
 
+
 class ViewMenu(menus.Menu):
     def __init__(self, *, auto_defer=True, **kwargs):
         super().__init__(**kwargs)
