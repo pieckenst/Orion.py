@@ -23,7 +23,6 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import typing
-import datetime
 
 from datetime import datetime
 from typing import TypeVar
@@ -59,7 +58,7 @@ class Timestamp:
     """
 
     @property
-    async def convert_to_timestamp(date):
+    async def convert_to_timestamp(date: datetime):
         """
         convert_to_timestamp: :class:`str`
             Converts datetime into timestamp message.
@@ -76,11 +75,11 @@ class Timestamp:
             Converts timestamp into datetime string. Datetime formate: '%d/%m/%Y - %H:%M:%S'
         .. versionadded:: 2.2
         """
-        date = datetime.timestamp(datetime.now())
+        date = (datetime.now()).timestamp()
         return "<t:" + f"{int(date)}>"
 
     @property
-    async def convert_to_date(timestamp):
+    async def convert_to_date(timestamp: int):
         """
         now: :class:`str`
             The timestamp message of the current datetime.
