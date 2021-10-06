@@ -56,7 +56,7 @@ class Timestamp:
     """
 
     
-    async def convert_to_timestamp(date: datetime):
+    def convert_to_timestamp(date: datetime):
         """
         convert_to_timestamp: :class:`str`
             Converts datetime into timestamp message.
@@ -66,7 +66,7 @@ class Timestamp:
         return "<t:" + f"{int(date.timestamp)}>"
 
    
-    async def now():
+    def now():
         """
         convert_to_datetime: :class:`str`
             Converts timestamp into datetime string. Datetime formate: '%d/%m/%Y - %H:%M:%S'
@@ -76,7 +76,7 @@ class Timestamp:
         return "<t:" + f"{int(date)}>"
 
     
-    async def convert_to_date(timestamp: str):
+    def convert_to_date(timestamp: str):
         """
         now: :class:`str`
             The timestamp message of the current datetime.
