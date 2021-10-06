@@ -29,6 +29,7 @@ packages = [
     'discord.ext.commands',
     'discord.ext.tasks',
     'discord.ext.menus',
+    'discord.ext.menus.views'
 ]
 
 setup(name='fusion.py',
