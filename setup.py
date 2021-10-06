@@ -30,17 +30,17 @@ packages = [
     'discord.ext.tasks',
 ]
 
-setup(name='orion.py',
+setup(name='fusion.py',
       author='Benitz Original',
       author_email="benitz@numix.xyz",
-      url='https://github.com/Senarc-Studios/Orion.py',
+      url='https://github.com/Senarc-Studios/Fusion.py',
       project_urls={
         "Old Documentation": "https://discordpy.readthedocs.io/en/latest/",
-        "New Documentation": "https://orion.senarc.org",
-        "Issue tracker": "https://github.com/Senarc-Studios/Orion.py/issues",
-        "Development Branch": "https://github.com/Senarc-Studios/Orion.py/tree/Development"
+        "New Documentation": "https://fusion.senarc.org",
+        "Issue tracker": "https://github.com/Senarc-Studios/Fusion.py/issues",
+        "Development Branch": "https://github.com/Senarc-Studios/Fusion.py/tree/Development"
       },
-      version="2.2.4",
+      version="2.2.5",
       packages=packages,
       license='MIT',
       description='An API wrapper for discord; maintained and improved from discord.py',

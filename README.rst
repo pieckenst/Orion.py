@@ -1,4 +1,4 @@
-Orion.py
+Fusion.py
 ==========
 
 .. image:: https://discord.com/api/guilds/881095332434440224/embed.png
@@ -7,29 +7,29 @@ Orion.py
 .. image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
    :target: https://www.python.org/
    :alt: Made with Python
-.. image:: https://img.shields.io/pypi/v/orion.py.svg
-   :target: https://pypi.python.org/pypi/orion.py
+.. image:: https://img.shields.io/pypi/v/fusion.py.svg
+   :target: https://pypi.python.org/pypi/fusion.py
    :alt: PyPI version info
-.. image:: https://img.shields.io/pypi/pyversions/orion.py.svg
-   :target: https://pypi.python.org/pypi/orion.py
+.. image:: https://img.shields.io/pypi/pyversions/fusion.py.svg
+   :target: https://pypi.python.org/pypi/fusion.py
    :alt: PyPI supported Python versions
-.. image:: https://img.shields.io/tokei/lines/github/Senarc-Studios/Orion.py?style=plastic
+.. image:: https://img.shields.io/tokei/lines/github/Senarc-Studios/fusion.py?style=plastic
     :alt: Lines of code
-.. image:: https://badge-size.herokuapp.com/Senarc-Studios/Orion.py/master/
+.. image:: https://badge-size.herokuapp.com/Senarc-Studios/fusion.py/master/
    :alt: Size of package
    :target: https://github.com/Naereen/StrapDown.js/blob/master
-.. image:: https://img.shields.io/github/issues/Senarc-Studios/Orion.py?style=plastic
+.. image:: https://img.shields.io/github/issues/Senarc-Studios/fusion.py?style=plastic
     :alt: GitHub issues   
-    :target: https://github.com/Senarc-Studios/Orion.py/issues
-.. image:: https://img.shields.io/github/forks/Senarc-Studios/Orion.py?style=plastic
+    :target: https://github.com/Senarc-Studios/fusion.py/issues
+.. image:: https://img.shields.io/github/forks/Senarc-Studios/fusion.py?style=plastic
     :alt: GitHub forks   
-    :target: https://github.com/Senarc-Studios/Orion.py/network
-.. image:: https://img.shields.io/github/stars/Senarc-Studios/Orion.py?style=plastic
+    :target: https://github.com/Senarc-Studios/fusion.py/network
+.. image:: https://img.shields.io/github/stars/Senarc-Studios/fusion.py?style=plastic
     :alt: GitHub stars   
-    :target: https://github.com/Senarc-Studios/Orion.py/stargazers
-.. image:: https://img.shields.io/github/license/Senarc-Studios/Orion.py?style=plastic
+    :target: https://github.com/Senarc-Studios/fusion.py/stargazers
+.. image:: https://img.shields.io/github/license/Senarc-Studios/fusion.py?style=plastic
     :alt: GitHub license   
-    :target: https://github.com/Senarc-Studios/Orion.py/blob/master/LICENSE
+    :target: https://github.com/Senarc-Studios/fusion.py/blob/master/LICENSE
 
 A modern, easy to use, feature-rich, and async ready API wrapper improved and revived from original discord.py.
 
@@ -52,20 +52,20 @@ To install the library without full voice support, you can just run the followin
 .. code:: sh
 
     # Linux/macOS
-    python3 -m pip install -U orion.py
+    python3 -m pip install -U fusion.py
 
     # Windows
-    py -3 -m pip install -U orion.py
+    py -3 -m pip install -U fusion.py
 
 Otherwise to get voice support you should run the following command:
 
 .. code:: sh
 
     # Linux/macOS
-    python3 -m pip install -U "orion.py[voice]"
+    python3 -m pip install -U "fusion.py[voice]"
 
     # Windows
-    py -3 -m pip install -U orion.py[voice]
+    py -3 -m pip install -U fusion.py[voice]
 
 
 To install the development version, do the following:
@@ -73,8 +73,8 @@ To install the development version, do the following:
 .. code:: sh
 
 
-    $ git clone https://github.com/Senarc-Studios/orion.py@Development
-    $ cd orion.py
+    $ git clone https://github.com/Senarc-Studios/fusion.py@Development
+    $ cd fusion.py
     $ python3 -m pip install -U .[voice]
 
 
