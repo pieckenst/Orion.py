@@ -97,4 +97,4 @@ class Timestamp:
             dt_obj = dt_obj.replace(" ", " - ")
             return dt_obj
         except Exception as e:
-            raise RuntimeError(f"ERROR: 'conver_to_date' function has failed to evaluate, Error:\n{e}")
+            raise RuntimeError(f"ERROR: 'convert_to_date' function has failed to evaluate, Error:\n{e}")
