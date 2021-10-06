@@ -63,7 +63,7 @@ class Timestamp:
         .. versionadded:: 2.2
         """
         date = datetime.strptime(date, "%d/%m/%Y - %H:%M:%S")
-        return "<t:" + f"{int(date.timestamp)}>"
+        return "<t:" + f"{int(date.timestamp())}>"
 
    
     def now():
