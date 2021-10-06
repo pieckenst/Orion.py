@@ -55,7 +55,7 @@ class Timestamp:
         .. versionadded:: 2.2
     """
 
-    @property
+    
     async def convert_to_timestamp(date: datetime):
         """
         convert_to_timestamp: :class:`str`
@@ -65,7 +65,7 @@ class Timestamp:
         date = datetime.strptime(date, "%d/%m/%Y - %H:%M:%S")
         return "<t:" + f"{int(date.timestamp)}>"
 
-    @property
+   
     async def now():
         """
         convert_to_datetime: :class:`str`
@@ -75,7 +75,7 @@ class Timestamp:
         date = (datetime.now()).timestamp()
         return "<t:" + f"{int(date)}>"
 
-    @property
+    
     async def convert_to_date(timestamp: str):
         """
         now: :class:`str`
