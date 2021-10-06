@@ -21,7 +21,6 @@ import logging
 from typing import Literal, NamedTuple
 
 from . import abc, opus, ui, utils
-from .timestamp import *
 from .activity import *
 from .appinfo import *
 from .asset import *
@@ -60,7 +59,8 @@ from .user import *
 from .voice_client import *
 from .webhook import *
 from .widget import *
-
+#from .timestamp import *
+#for whatever reason it's a star import issue
 
 class VersionInfo(NamedTuple):
     major: int
