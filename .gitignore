@@ -19,3 +19,4 @@ docs/crowdin.py
 *.gz
 **/__pycache__
 .vscode
+.idea

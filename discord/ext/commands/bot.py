@@ -205,6 +205,7 @@ class BotBase(GroupMixin):
         await self.create_slash_interaction()
 
     async def create_slash_interaction(self):
+        # Credits to the original code: https://github.com/iDevision/enhanced-discord.py/blob/2.0/discord/ext/commands/bot.py
         commands: defaultdict[Optional[int], List[EditApplicationCommand]] = defaultdict(list)
         for command in self.commands:
             if command.hidden or (command.slash_interaction is None and not self.slash_interactions):

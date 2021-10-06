@@ -15,6 +15,7 @@ Fusion.py
    :alt: PyPI supported Python versions
 .. image:: https://img.shields.io/tokei/lines/github/Senarc-Studios/fusion.py?style=plastic
     :alt: Lines of code
+
 .. image:: https://badge-size.herokuapp.com/Senarc-Studios/fusion.py/master/
    :alt: Size of package
    :target: https://github.com/Naereen/StrapDown.js/blob/master
