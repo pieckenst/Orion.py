@@ -415,7 +415,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
     async def send(self, content: Optional[str] = None, return_message: Literal[True] = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         ...
 
-    async def send(self,content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False ,view: View = Optional[View], **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+    async def send(self,content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, view: Optional[View] = None, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         """
         |coro|
         A shortcut method to :meth:`.abc.Messageable.send` with interaction helpers.
