@@ -23,23 +23,23 @@ DEALINGS IN THE SOFTWARE.
 """
 
 from __future__ import annotations
-
-import asyncio
-import os
-import sys
-import time
-import traceback
+from typing import Any, Callable, ClassVar, Dict, Iterator, List, Optional, Sequence, TYPE_CHECKING, Tuple
 from functools import partial
 from itertools import groupby
-from typing import (TYPE_CHECKING, Any, Callable, ClassVar, Dict, Iterator,
-                    List, Optional, Sequence, Tuple)
 
-from ..components import ActionRow as ActionRowComponent
-from ..components import Button as ButtonComponent
-from ..components import Component
-from ..components import SelectMenu as SelectComponent
-from ..components import _component_factory
+import traceback
+import asyncio
+import sys
+import time
+import os
 from .item import Item, ItemCallbackType
+from ..components import (
+    Component,
+    ActionRow as ActionRowComponent,
+    _component_factory,
+    Button as ButtonComponent,
+    SelectMenu as SelectComponent,
+)
 
 __all__ = (
     'View',
@@ -49,8 +49,8 @@ __all__ = (
 if TYPE_CHECKING:
     from ..interactions import Interaction
     from ..message import Message
-    from ..state import ConnectionState
     from ..types.components import Component as ComponentPayload
+    from ..state import ConnectionState
 
 
 def _walk_all_components(components: List[Component]) -> Iterator[Component]:
@@ -357,7 +357,7 @@ class View:
                 return
 
             await item.callback(interaction)
-            if not interaction.response.is_done():
+            if not interaction.response._responded:
                 await interaction.response.defer()
         except Exception as e:
             return await self.on_error(e, item, interaction)
