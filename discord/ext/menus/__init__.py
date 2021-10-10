@@ -25,14 +25,14 @@ DEALINGS IN THE SOFTWARE.
 """
 
 import asyncio
-import bisect
-import inspect
+import discord
+
 import itertools
+import inspect
+import bisect
 import logging
 import re
 from collections import OrderedDict, namedtuple
-
-import discord
 
 # Needed for the setup.py script
 __version__ = '1.0.0-a'
