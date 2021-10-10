@@ -3,13 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Orion.py
+Welcome to Fusion.py
 ===========================
 
 .. image:: /images/snake.svg
 .. image:: /images/snake_dark.svg
 
-orion.py is a modern, easy to use, feature-rich, and async ready API wrapper
+fusion.py is a modern, easy to use, feature-rich, and async ready API wrapper
 for Discord.
 
 **Features:**

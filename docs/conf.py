@@ -79,7 +79,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'orion.py'
+project = 'fusion.py'
 copyright = 'Senarc-Studios & 2015-present, Rapptz'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -170,7 +170,7 @@ resource_links = {
   'discord': 'https://discord.gg/RqzbB4hE6p',
   'issues': 'https://discord.gg/RqzbB4hE6p',
   'discussions': 'https://discord.gg/RqzbB4hE6p',
-  'examples': f'https://github.com/Senarc-Studios/Orion.py/tree/{branch}/examples',
+  'examples': f'https://github.com/Senarc-Studios/Fusion.py/tree/{branch}/examples',
 }
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -196,7 +196,7 @@ resource_links = {
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = './images/orion.png'
+html_favicon = './images/fusion.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -293,7 +293,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'orion.py.tex', 'orion.py Documentation',
+  ('index', 'fusion.py.tex', 'fusion.py Documentation',
    'Senarc-Studios', 'manual'),
 ]
 
@@ -323,7 +323,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'orion.py', 'orion.py Documentation',
+    ('index', 'fusion.py', 'fusion.py Documentation',
      ['Senarc-Studios'], 1)
 ]
 
@@ -337,8 +337,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'orion.py', 'orion.py Documentation',
-   'Senarc-Studios', 'orion.py', 'One line description of project.',
+  ('index', 'fusion.py', 'fusion.py Documentation',
+   'Senarc-Studios', 'fusion.py', 'One line description of project.',
    'Miscellaneous'),
 ]
 
