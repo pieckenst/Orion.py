@@ -11,6 +11,57 @@ Changelog
 This page keeps a detailed human friendly rendering of what's new and changed
 in specific versions.
 
+.. _vp2p2p5:
+
+v2.2.5
+--------
+
+Changes
+~~~~~~~~~~
+
+- Changed Names
+- Updated Links
+- Updated README
+- Fully Fixed :attr:`discord.errors`
+- Renamed slash_interaction_guilds to guild_whitelist.
+- Updated Documentation
+- Fixed Licensing
+- Updated README Badges
+- Added delete_after arg in interactions.
+- Added can_send method to check is message can be sent.
+- Added support for Role Icons.
+- Added ephemeral attachments.
+
+.. _vp2p2p4:
+
+v2.2.4
+--------
+
+Changes
+~~~~~~~~~~
+
+- Optimised config behaviour of slash interactions.
+- Updated to a description.
+- Added Documentation link in PyPi.
+- Minor bug fixes in :attr:`discord.errors`
+
+.. _vp2p2p3:
+
+v2.2.3
+--------
+
+Changes
+~~~~~~~~~~
+
+- Added Slash Interactions to commands.
+- Added ephemeral messages to commands and attachments.
+- Added an accurate snowflake generator.
+- Added a method to get snowflake data.
+- Updated Utils.
+- Edited Links
+- Added Discord Parties.
+- Updated Quick Examples.
+
 .. _vp1p7p3:
 
 v1.7.3
