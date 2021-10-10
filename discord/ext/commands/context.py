@@ -34,7 +34,7 @@ from warnings import warn
 import discord.abc
 import discord.utils
 from discord.ext import commands
-from discord.ui.view import View
+
 from discord.message import Message
 from discord.utils import snowflake_time
 
@@ -415,7 +415,7 @@ class Context(discord.abc.Messageable, Generic[BotT]):
     async def send(self, content: Optional[str] = None, return_message: Literal[True] = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         ...
 
-    async def send(self,content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, view: Optional[View] = None, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
+    async def send(self,content: Optional[str] = None, return_message: bool = True, ephemeral: bool = False, **kwargs: Any) -> Optional[Union[Message, WebhookMessage]]:
         """
         |coro|
         A shortcut method to :meth:`.abc.Messageable.send` with interaction helpers.
